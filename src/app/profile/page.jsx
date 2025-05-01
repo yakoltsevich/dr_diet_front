@@ -3,7 +3,7 @@
 
 import {motion} from 'framer-motion';
 import {ProfileHeader} from "@/components/profile/ProfileHeader";
-import {ProfileDetails} from "@/components/profile/ProfileDetails";
+import {UserProfileForm} from "@/components/profile/UserProfileForm";
 
 export default function ProfilePage() {
     return (
@@ -20,7 +20,7 @@ export default function ProfilePage() {
                 animate={{opacity: 1, y: 0}}
                 transition={{duration: 0.6, delay: 0.2}}
             >
-                <ProfileDetails/>
+                <UserProfileForm/>
             </motion.div>
         </div>
     );

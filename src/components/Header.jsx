@@ -30,6 +30,9 @@ export const Header = () => {
                 <nav className=" flex items-center">
                     {isAuth ? (
                         <>
+                            <Button variant="outline" onPress={() => router.push('/menu')}>
+                                Menu
+                            </Button>
                             <Button variant="outline" onPress={() => router.push('/profile')}>
                                 Профиль
                             </Button>
