@@ -3,6 +3,7 @@ import {Providers} from "./providers";
 import {Manrope} from 'next/font/google'
 import {Header2} from "@/components/Header2";
 import {Header} from "@/components/Header";
+import {Footer} from "@/components/Footer";
 
 export const metadata = {
     title: "Dr Diet App",
@@ -24,10 +25,12 @@ export default function RootLayout({children}) {
 
         </head>
         <body className={manrope.className}>
-        <Header />
+        <Header2/>
         <Providers>
             {children}
         </Providers>
+        <Footer />
+
         </body>
         </html>
     );

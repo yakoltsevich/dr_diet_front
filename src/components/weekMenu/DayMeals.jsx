@@ -12,8 +12,8 @@ export const DayMeals = ({day}) => {
 
     return (
         <div className='w-full  p-4 '>
-            <h2 className="text-2xl font-bold text-[#353535] mb-2">День {day.day}</h2>
-            <div className="text-[#5e7a76] font-medium mb-4 flex gap-3">
+            <h2 className="text-2xl font-bold text-textColor mb-2">День {day.day}</h2>
+            <div className="text-primaryColor font-medium mb-4 flex gap-3">
                 <div>{day.total.calories} ккал</div>
                 <div>{day.total.protein}г белка</div>
                 <div>{day.total.fat}г жиры</div>

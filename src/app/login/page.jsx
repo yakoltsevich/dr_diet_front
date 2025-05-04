@@ -31,10 +31,11 @@ export const Login = () => {
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <Card className="w-full max-w-md p-8">
                 <CardBody>
-                    <h2 className="text-2xl font-bold mb-6 text-center  bg-red-500">Вход</h2>
-                    <form onSubmit={handleLogin}>
+                    <h2 className="text-2xl font-bold mb-6 text-center">Вход</h2>
+                    <form onSubmit={handleLogin}  className="flex flex-col gap-4">
                         <Input
                             label="Email"
+                            labelPlacement='outside'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
@@ -42,6 +43,7 @@ export const Login = () => {
                         />
                         <Input
                             label="Пароль"
+                            labelPlacement='outside'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"

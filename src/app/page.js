@@ -1,19 +1,17 @@
-import {Snippet} from "@heroui/snippet";
-import {Code} from "@heroui/code";
-import {Button} from "@heroui/button";
+import {StepsSection} from "@/components/home/StepsSection";
+import {HeroSection} from "@/components/home/HeroSection";
+import {BenefitsSection} from "@/components/home/BenefitsSection";
+import {CallToAction} from "@/components/home/CallToAction";
+import {Footer} from "@/components/Footer";
 
-export default function Home() {
+
+export default function HomePage() {
     return (
-        <section className="flex flex-col items-center justify-center gap-4 ">
-
-            <div className="mt-8">
-                <Snippet hideCopyButton hideSymbol variant="bordered">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-                </Snippet>
-            </div>
-            <Button>dasdasdas</Button>
-        </section>
+        <main className="bg-[#f3f3f2] text-[#353535] flex flex-col items-center justify-center w-full">
+            <HeroSection />
+            <StepsSection />
+            <BenefitsSection />
+            <CallToAction />
+        </main>
     );
 }

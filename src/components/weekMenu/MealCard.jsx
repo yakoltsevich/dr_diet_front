@@ -10,14 +10,19 @@ export const MealCard = ({title, icon, meal}) => {
     return (
         <>
             <div className="bg-white p-4 rounded-xl shadow-md flex items-start gap-4">
-                <div className="text-2xl">{icon}</div>
-                <div className="flex-1 space-y-1">
-                    <div className="text-lg font-semibold text-[#353535]">{title}</div>
-                    <div className="text-sm text-[#353535]">{meal.dish}</div>
-                    <div className="text-sm text-[#353535]">{meal.total.calories} ккал</div>
+                <div className="flex-1 space-y-1 text-sm text-textColor">
+                    <div className="text-lg font-semibold">{title}</div>
+                    <div className="">{meal.dish}</div>
+                    <div className='flex gap-2 text-primaryColor'>
+                        <div>{meal.total.calories} ккал</div>
+                        <div>{meal.total.protein}г белка</div>
+                        <div>{meal.total.fat}г жиры</div>
+                        <div>{meal.total.carbs}г углеводы</div>
+                    </div>
+
                 </div>
-                <Button size="sm" className="" onPress={() => setOpen(true)}>
-                    Смотреть рецепт
+                <Button size="sm" className="bg-primaryColor text-white" onPress={() => setOpen(true)}>
+                    Рецепт
                 </Button>
             </div>
             <RecipeModal isOpen={open} onClose={() => setOpen(false)} title={meal.dish} recipe={meal.recipe}/>

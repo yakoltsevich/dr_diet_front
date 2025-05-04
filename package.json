@@ -25,16 +25,19 @@
     "@heroui/listbox": "^2.3.18",
     "@heroui/modal": "^2.2.16",
     "@heroui/navbar": "^2.2.15",
+    "@heroui/number-input": "^2.0.9",
     "@heroui/react": "^2.7.6",
     "@heroui/select": "^2.4.17",
     "@heroui/snippet": "^2.2.18",
     "@heroui/system": "^2.4.13",
+    "@heroui/tabs": "^2.2.16",
     "@heroui/theme": "^2.4.13",
     "axios": "^1.9.0",
     "framer-motion": "^12.9.2",
     "next": "15.3.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.5.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

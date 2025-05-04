@@ -1,10 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Button } from '@heroui/button';
-import { axiosClient } from '@/lib/axiosClient';
-import { BasicInfoForm } from './BasicInfoForm';
-import { NutritionForm } from './NutritionForm';
-import { PreferencesForm } from './PreferencesForm';
+import {useEffect, useState} from 'react';
+import {Button} from '@heroui/button';
+import {axiosClient} from '@/lib/axiosClient';
+import {BasicInfoForm} from './BasicInfoForm';
+import {NutritionForm} from './NutritionForm';
+import {PreferencesForm} from './PreferencesForm';
+import {Accordion, AccordionItem} from '@heroui/accordion';
 
 export const UserProfileForm = () => {
     const [form, setForm] = useState({
@@ -30,7 +31,7 @@ export const UserProfileForm = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const { data } = await axiosClient.get('/profile/me');
+                const {data} = await axiosClient.get('/profile/me');
                 setForm({
                     ...form,
                     ...data,
@@ -56,12 +57,12 @@ export const UserProfileForm = () => {
     }, []);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setForm((prev) => ({...prev, [name]: value}));
     };
 
     const handleSelectChange = (field, value) => {
-        setForm((prev) => ({ ...prev, [field]: value }));
+        setForm((prev) => ({...prev, [field]: value}));
     };
 
     const handleSubmit = async (e) => {
@@ -94,10 +95,18 @@ export const UserProfileForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 space-y-6 flex flex-col">
-            <BasicInfoForm form={form} onChange={handleChange} onSelect={handleSelectChange} />
-            <NutritionForm form={form} onChange={handleChange} />
-            <PreferencesForm form={form} onChange={handleChange} />
-            <Button type="submit" className="w-full">Сохранить профиль</Button>
+            <Accordion>
+                <AccordionItem title="Основная информация">
+                    <BasicInfoForm form={form} onChange={handleChange} onSelect={handleSelectChange}/>
+                </AccordionItem>
+                <AccordionItem title="Цели и параметры">
+                    <NutritionForm form={form} onChange={handleChange}/>
+                </AccordionItem>
+                <AccordionItem title="Питание">
+                    <PreferencesForm form={form} onChange={handleChange}/>
+                </AccordionItem>
+            </Accordion>
+            <Button type="submit" className="w-full text-white bg-primaryColor">Сохранить профиль</Button>
         </form>
     );
 };

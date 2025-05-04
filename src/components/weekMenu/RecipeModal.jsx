@@ -12,10 +12,10 @@ export const RecipeModal = ({isOpen, onClose, title, recipe})=> {
             <ModalContent>
                 {(close) => (
                     <>
-                        <ModalHeader className="text-xl font-bold text-[#353535]">{title}</ModalHeader>
-                        <ModalBody className="space-y-4 text-[#353535] text-sm">
+                        <ModalHeader className="text-xl font-bold text-textColor">{title}</ModalHeader>
+                        <ModalBody className="space-y-4 text-textColor text-sm">
                             <div>
-                                <h3 className="font-semibold text-[#5e7a76]">Ингредиенты:</h3>
+                                <h3 className="font-semibold text-primaryColor">Ингредиенты:</h3>
                                 <ul className="list-disc list-inside mt-1">
                                     {recipe.ingredients.map((item, i) => (
                                         <li key={i}>
@@ -25,7 +25,7 @@ export const RecipeModal = ({isOpen, onClose, title, recipe})=> {
                                 </ul>
                             </div>
                             <div>
-                                <h3 className="font-semibold text-[#5e7a76]">Шаги приготовления:</h3>
+                                <h3 className="font-semibold text-primaryColor">Шаги приготовления:</h3>
                                 <ol className="list-decimal list-inside mt-1">
                                     {recipe.steps.map((step, i) => (
                                         <li key={i}>{step}</li>
@@ -34,7 +34,7 @@ export const RecipeModal = ({isOpen, onClose, title, recipe})=> {
                             </div>
                         </ModalBody>
                         <ModalFooter>
-                            <Button className="bg-[#5e7a76] text-white w-full" onPress={close}>
+                            <Button className="bg-primaryColor text-white w-full" onPress={close}>
                                 Закрыть
                             </Button>
                         </ModalFooter>

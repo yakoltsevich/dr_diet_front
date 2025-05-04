@@ -40,7 +40,7 @@ export default () => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto p-4 ">
+        <div className="max-w-7xl mx-auto p-4 min-h-[calc(100vh-217px)]">
             {
                 !menu || menu.length === 0 && (
                     <Button onPress={generateMenu} disabled={loading} className="w-full">
@@ -50,58 +50,12 @@ export default () => {
             }
 
             {error && <p className="text-red-500">{error}</p>}
-
+            <div className='flex-1'/>
             {
                 menu && menu.length !== 0 && (
                     <WeekMenu menu={menu}/>
                 )
             }
-            {/*{menu && menu.length > 0 && (*/}
-            {/*    <div className="space-y-6">*/}
-            {/*        {menu.map((day) => (*/}
-            {/*            <div key={day.day} className="p-4 rounded-lg shadow bg-white">*/}
-            {/*                <h2 className="text-xl font-semibold mb-2">День {day.day}</h2>*/}
-
-            {/*                {['breakfast', 'lunch', 'dinner'].map((mealKey) => {*/}
-            {/*                    const meal = day[mealKey];*/}
-            {/*                    if (!meal) return null;*/}
-
-            {/*                    return (*/}
-            {/*                        <div key={mealKey} className="mb-4">*/}
-            {/*                            <h3 className="font-medium capitalize">*/}
-            {/*                                {mealKey === 'breakfast' ? 'Завтрак' : mealKey === 'lunch' ? 'Обед' : 'Ужин'}*/}
-            {/*                            </h3>*/}
-            {/*                            <p><strong>Блюдо:</strong> {meal.dish}</p>*/}
-
-            {/*                            <p className="mt-2 font-semibold">Ингредиенты:</p>*/}
-            {/*                            <ul className="list-disc list-inside text-sm">*/}
-            {/*                                {meal.recipe.ingredients.map((ing, idx) => (*/}
-            {/*                                    <li key={idx}>{ing.item}: {ing.amount}</li>*/}
-            {/*                                ))}*/}
-            {/*                            </ul>*/}
-
-            {/*                            <p className="mt-2 font-semibold">Приготовление:</p>*/}
-            {/*                            <ol className="list-decimal list-inside text-sm space-y-1">*/}
-            {/*                                {meal.recipe.steps.map((step, idx) => (*/}
-            {/*                                    <li key={idx}>{step}</li>*/}
-            {/*                                ))}*/}
-            {/*                            </ol>*/}
-
-            {/*                            <p className="text-sm text-gray-500 mt-2">*/}
-            {/*                                БЖУ: {meal.total.calories} ккал, Б: {meal.total.protein}г, Ж: {meal.total.fat}г, У: {meal.total.carbs}г*/}
-            {/*                            </p>*/}
-            {/*                        </div>*/}
-            {/*                    );*/}
-            {/*                })}*/}
-
-            {/*                <div className="text-sm font-semibold border-t pt-2 mt-2">*/}
-            {/*                    Итого за день: {day.total.calories} ккал, Б: {day.total.protein}г, Ж: {day.total.fat}г, У: {day.total.carbs}г*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        ))}*/}
-            {/*    </div>*/}
-            {/*)}*/}
-
         </div>
     );
 };
