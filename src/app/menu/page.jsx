@@ -42,7 +42,8 @@ export default () => {
     return (
         <div className="max-w-7xl mx-auto p-4 min-h-[calc(100vh-217px)]">
             {
-                !menu || menu.length === 0 && (
+                // !menu || menu.length === 0 && (
+                (
                     <Button onPress={generateMenu} disabled={loading} className="w-full">
                         {loading ? 'Генерация меню...' : 'Сгенерировать меню на неделю'}
                     </Button>

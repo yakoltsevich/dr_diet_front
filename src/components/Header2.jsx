@@ -16,6 +16,13 @@ import {useRouter} from "next/navigation";
 export const Header2 = () => {
 
     const router = useRouter();
+
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        // setIsAuth(false);
+        router.push('/login');
+    };
     return (
         <Navbar height={80} isBordered maxWidth="full" className="bg-[#f3f3f2] text-[#353535] justify-end"
         classNames={{
@@ -85,7 +92,7 @@ export const Header2 = () => {
 
 
                         <DropdownSection >
-                            <DropdownItem key="logout" color="danger">Выйти</DropdownItem>
+                            <DropdownItem key="logout" color="danger" onPress={handleLogout}>Выйти</DropdownItem>
                         </DropdownSection>
                     </DropdownMenu>
                 </Dropdown>
