@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {Button} from '@heroui/button';
 import {axiosClient} from '@/lib/axiosClient';
 import {WeekMenu} from "@/components/weekMenu/WeekMenu";
+import {MOCKED_MENU} from "@/shared/constants";
 
 export default () => {
     const [menu, setMenu] = useState(null);
@@ -42,8 +43,7 @@ export default () => {
     return (
         <div className="max-w-7xl mx-auto p-4 min-h-[calc(100vh-217px)]">
             {
-                // !menu || menu.length === 0 && (
-                (
+                !menu || menu.length === 0 && (
                     <Button onPress={generateMenu} disabled={loading} className="w-full">
                         {loading ? 'Генерация меню...' : 'Сгенерировать меню на неделю'}
                     </Button>
@@ -54,7 +54,7 @@ export default () => {
             <div className='flex-1'/>
             {
                 menu && menu.length !== 0 && (
-                    <WeekMenu menu={menu}/>
+                    <WeekMenu menu={MOCKED_MENU}/>
                 )
             }
         </div>
