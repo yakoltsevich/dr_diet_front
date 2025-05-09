@@ -31,7 +31,7 @@ export default () => {
         setError(null);
         try {
             const response = await axiosClient.post('/menu/generate', {body: {}});
-            setMenu(response.data.menu);
+            setMenu(response.data.menu || MOCKED_MENU);
         } catch (err) {
             console.error(err);
             setError('Ошибка при генерации меню');
@@ -54,7 +54,7 @@ export default () => {
             <div className='flex-1'/>
             {
                 menu && menu.length !== 0 && (
-                    <WeekMenu menu={MOCKED_MENU}/>
+                    <WeekMenu menu={menu}/>
                 )
             }
         </div>
