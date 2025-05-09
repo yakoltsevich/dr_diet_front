@@ -18,3 +18,17 @@ axiosClient.interceptors.request.use((config) => {
     }
     return config;
 });
+
+axiosClient.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            // Очистить localStorage и отправить на логин
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);

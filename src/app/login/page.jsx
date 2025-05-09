@@ -36,6 +36,7 @@ export const Login = () => {
                         <Input
                             label="Email"
                             labelPlacement='outside'
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
@@ -45,6 +46,7 @@ export const Login = () => {
                             label="Пароль"
                             labelPlacement='outside'
                             value={password}
+                            placeholder="Пароль"
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             required

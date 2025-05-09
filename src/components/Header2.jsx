@@ -21,7 +21,7 @@ export const Header2 = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         // setIsAuth(false);
-        router.push('/login');
+        router.push('/');
     };
     return (
         <Navbar height={80} isBordered maxWidth="full" className="bg-[#f3f3f2] text-[#353535] justify-end"
