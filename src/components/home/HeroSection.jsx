@@ -1,27 +1,55 @@
 'use client';
 
 import Image from 'next/image';
+import {Card, CardBody} from '@heroui/card';
+import {Button} from '@heroui/button';
+import {useRouter} from "next/navigation";
 
 export const HeroSection = () => {
+    const router = useRouter();
+
+    const onLearnMorePress = () => {
+        router.push('/learn-more');
+    }
+
     return (
-        <section className="max-w-7xl w-xl flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
+        <section
+            className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
             <div className="md:w-1/2 space-y-6">
-                <h1 className="text-4xl md:text-5xl font-bold">
+                <h1 className="text-4xl md:text-5xl font-bold text-[#353535]">
                     Ваш личный план питания — без лишних усилий
                 </h1>
-                <p className="text-lg text-[#5e7a76]">
+                <p className="text-lg text-primaryColor">
                     Генерируйте сбалансированное меню на неделю, узнайте рецепты и получайте список покупок по вашим
                     целям.
                 </p>
                 <div className="flex gap-4">
-                    <button className="bg-[#5e7a76] text-white px-6 py-3 rounded-lg shadow-lg">Начать</button>
-                    <button className="border border-[#5e7a76] text-[#5e7a76] px-6 py-3 rounded-lg">Узнать больше
-                    </button>
+                    <Button size='lg' className="bg-primaryColor text-white px-6 py-3 rounded-lg shadow-lg">
+                        Начать
+                    </Button>
+                    <Button
+                        size='lg'
+                        variant="outline"
+                        className="border border-primaryColor text-primaryColor px-6 py-3 rounded-lg bg-transparent"
+                        onPress={onLearnMorePress}
+                    >
+                        Узнать больше
+                    </Button>
                 </div>
             </div>
             <div className="md:w-1/2 mt-10 md:mt-0">
-                <Image src="/woman.png" alt="Здоровая еда" width={500} height={500} className="w-full"/>
+                <Card className="shadow-none border-0 bg-transparent">
+                    <CardBody className="p-0">
+                        <Image
+                            src="/woman.png"
+                            alt="Здоровая еда"
+                            width={500}
+                            height={500}
+                            className="w-full h-auto object-cover"
+                        />
+                    </CardBody>
+                </Card>
             </div>
         </section>
     );
-}
+};

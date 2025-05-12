@@ -1,13 +1,15 @@
-// app/providers.tsx
-'use client'
+'use client';
 
-import {HeroUIProvider} from '@heroui/react'
-import * as React from "react";
+import { HeroUIProvider } from '@heroui/react';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from '@/store';
 
-export function Providers({children}) {
+export function Providers({ children }) {
     return (
-        <HeroUIProvider>
-            {children}
-        </HeroUIProvider>
-    )
+        <ReduxProvider store={store}>
+            <HeroUIProvider>
+                {children}
+            </HeroUIProvider>
+        </ReduxProvider>
+    );
 }

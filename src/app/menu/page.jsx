@@ -12,6 +12,7 @@ export default () => {
     const [error, setError] = useState(null);
     useEffect(() => {
         getMenu()
+        setMenu(MOCKED_MENU)
     }, [])
     const getMenu = async () => {
         setLoading(true);
@@ -31,7 +32,7 @@ export default () => {
         setError(null);
         try {
             const response = await axiosClient.post('/menu/generate', {body: {}});
-            setMenu(response.data.menu || MOCKED_MENU);
+            setMenu(response.data.menu);
         } catch (err) {
             console.error(err);
             setError('Ошибка при генерации меню');

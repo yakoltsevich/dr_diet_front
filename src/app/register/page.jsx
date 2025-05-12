@@ -5,7 +5,8 @@ import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Card, CardBody } from '@heroui/card';
 import { useRouter } from 'next/navigation';
-import {axiosClient} from "@/lib/axiosClient";
+import Link from 'next/link';
+import { axiosClient } from "@/lib/axiosClient";
 
 export const Register = () => {
     const [email, setEmail] = useState('');
@@ -29,22 +30,24 @@ export const Register = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-            <Card className="w-full max-w-md p-6 ">
+            <Card className="w-full max-w-md p-6">
                 <CardBody className="flex flex-col items-center gap-3">
-                    <h2 className="text-2xl font-bold mb-6 text-center">Регистрация</h2>
-                    <form onSubmit={handleRegister} className=" w-full flex flex-col items-center gap-3">
+                    <h2 className="text-2xl font-bold mb-4 text-center">Регистрация</h2>
+                    <form onSubmit={handleRegister} className="w-full flex flex-col items-center gap-3">
                         <Input
                             label="Email"
+                            placeholder="Ведите email"
                             value={email}
-                            labelPlacement='outside'
+                            labelPlacement="outside"
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
                             required
                         />
                         <Input
                             label="Пароль"
+                            placeholder="Ведите пароль"
                             value={password}
-                            labelPlacement='outside'
+                            labelPlacement="outside"
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             required
@@ -54,6 +57,12 @@ export const Register = () => {
                             Зарегистрироваться
                         </Button>
                     </form>
+                    <div className="mt-2 text-sm text-gray-600 text-center">
+                        Уже есть аккаунт?{' '}
+                        <Link href="/login" className="text-[#5e7a76] hover:underline">
+                            Войти
+                        </Link>
+                    </div>
                 </CardBody>
             </Card>
         </div>

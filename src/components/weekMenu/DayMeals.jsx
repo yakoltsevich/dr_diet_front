@@ -17,7 +17,7 @@ export const DayMeals = ({day}) => {
                 <div>{day.total.carbs}г углеводы</div>
             </div>
             <div className="flex flex-col gap-4">
-                {day.meals.map((meal) => (
+                {day.meals?.map((meal) => (
                     <MealCard key={meal.title} {...meal}/>
                 ))}
             </div>
