@@ -16,8 +16,8 @@ export const MealCard = (meal) => {
                     <div className="text-lg font-semibold">{meal.title}</div>
                     <div className='flex gap-2 text-primaryColor'>
                         <div>{meal.calories} ккал</div>
-                        <div>{meal.proteins}г белка</div>
-                        <div>{meal.fats}г жиры</div>
+                        <div>{meal.protein}г белка</div>
+                        <div>{meal.fat}г жиры</div>
                         <div>{meal.carbs}г углеводы</div>
                     </div>
 

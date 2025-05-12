@@ -29,13 +29,14 @@ export const Register = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-            <Card className="w-full max-w-md p-6">
-                <CardBody className="flex flex-col items-center">
+            <Card className="w-full max-w-md p-6 ">
+                <CardBody className="flex flex-col items-center gap-3">
                     <h2 className="text-2xl font-bold mb-6 text-center">Регистрация</h2>
-                    <form onSubmit={handleRegister} className=" w-full">
+                    <form onSubmit={handleRegister} className=" w-full flex flex-col items-center gap-3">
                         <Input
                             label="Email"
                             value={email}
+                            labelPlacement='outside'
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
                             required
@@ -43,6 +44,7 @@ export const Register = () => {
                         <Input
                             label="Пароль"
                             value={password}
+                            labelPlacement='outside'
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             required
