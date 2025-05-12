@@ -7,6 +7,7 @@ export const Footer = () => {
                 <a href="/login" className="hover:underline">Вход</a>
                 <a href="/register" className="hover:underline">Регистрация</a>
                 <a href="/privacy" className="hover:underline">Политика конфиденциальности</a>
+                <a href="/terms" className="hover:underline">Условия использования</a>
             </div>
         </footer>
     );
