@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { usePathname } from 'next/navigation';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { setCredentials } from '@/store/slices/authSlice'; // предполагается, что он есть
+import {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {usePathname} from 'next/navigation';
+import {Header} from '@/components/Header';
+import {Footer} from '@/components/Footer';
+import {setCredentials} from '@/store/slices/authSlice'; // предполагается, что он есть
 
-export const ClientLayoutShell = ({ children }) => {
+export const ClientLayoutShell = ({children}) => {
     const pathname = usePathname();
     const dispatch = useDispatch();
     const [isMounted, setIsMounted] = useState(false);
@@ -33,10 +33,10 @@ export const ClientLayoutShell = ({ children }) => {
     if (!isMounted) return null;
 
     return (
-        <>
-            {!hideHeaderAndFooter && <Header />}
+        <div>
+            {!hideHeaderAndFooter && <Header/>}
             <main>{children}</main>
-            {!hideHeaderAndFooter && <Footer />}
-        </>
+            {!hideHeaderAndFooter && <Footer/>}
+        </div>
     );
 };

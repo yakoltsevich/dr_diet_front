@@ -6,7 +6,7 @@ import { ClientLayoutShell } from './client-layout-shell';
 
 export const metadata = {
     title: 'Dr Diet App',
-    description: 'Авторизация и регистрация',
+    description: 'Menu and groceries',
 };
 
 const manrope = Manrope({

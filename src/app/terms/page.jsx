@@ -27,7 +27,7 @@ export default function TermsPage() {
     return (
         <div className="p-6 max-w-3xl mx-auto text-[#353535]">
             <h1 className="text-2xl font-semibold mb-4">{data.title}</h1>
-            <p className="text-sm text-gray-500 mb-6">Обновлено: {data.lastUpdated}</p>
+            <p className="text-sm text-gray-500 mb-6">Updated: {data.lastUpdated}</p>
             {data.sections?.map((section, idx) => (
                 <div key={idx} className="mb-6">
                     <h2 className="text-xl font-medium mb-2">{section.heading}</h2>

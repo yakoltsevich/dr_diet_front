@@ -31,7 +31,7 @@ export default function HomePage() {
             setLoading(false);
         }
     };
-    if (loading) return <div>Загрузка...</div>;
+    if (loading) return <div>Loading...</div>;
     return (
         <main className="bg-[#f3f3f2] text-[#353535] flex flex-col items-center justify-center w-full">
             <HeroSection/>

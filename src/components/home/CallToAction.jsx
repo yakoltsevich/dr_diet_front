@@ -1,14 +1,12 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { Button } from "@heroui/button";
-import {useSelector} from "react-redux";
-// Предположим, у тебя есть кастомный хук аутентификации
+import { useSelector } from "react-redux";
 
 export const CallToAction = () => {
     const router = useRouter();
+    const { isAuthenticated } = useSelector(state => state.auth);
 
-    const {isAuthenticated} = useSelector(state => state.auth);
     const handleSignUp = () => {
         router.push('/login');
     };
@@ -22,25 +20,25 @@ export const CallToAction = () => {
             {!isAuthenticated ? (
                 <>
                     <h2 className="text-3xl font-semibold mb-4">
-                        Попробуйте свой первый план питания уже сегодня
+                        Try your first meal plan today
                     </h2>
                     <button
                         onClick={handleSignUp}
                         className="bg-white text-primaryColor px-6 py-3 rounded-lg font-semibold"
                     >
-                        Зарегистрироваться бесплатно
+                        Sign up for free
                     </button>
                 </>
             ) : (
                 <>
                     <h2 className="text-3xl font-semibold mb-4">
-                        Готовы продолжить планирование?
+                        Ready to continue planning?
                     </h2>
                     <button
                         onClick={handleGoToMenu}
                         className="bg-white text-primaryColor px-6 py-3 rounded-lg font-semibold"
                     >
-                        Перейти к меню
+                        Go to Menu
                     </button>
                 </>
             )}

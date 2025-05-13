@@ -16,7 +16,7 @@ export const ProfileHeader = () => {
                 size="lg"
                 showFallback
                 fallback={<Icon icon={faUser}/>}
-                src="/girl.png"
+                src="/nonBinary.png"
             />
 
             <div className='flex flex-col items-start'>
