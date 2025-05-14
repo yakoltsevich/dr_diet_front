@@ -1,34 +1,59 @@
 import axios from 'axios';
+import {store} from '@/store'; // путь до твоего redux store
+import {setAccessToken} from '@/store/slices/authSlice';
 
-const API_URL = 'http://localhost:3000'; // сюда укажи свой реальный backend адрес
+const API_URL = 'http://localhost:3000'; // замени на реальный адрес
 
 export const axiosClient = axios.create({
     baseURL: API_URL,
+    withCredentials: true, // чтобы отправлялись cookies (refresh_token)
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Автоматическое добавление токена из localStorage
+// Добавляем access token из Redux
 axiosClient.interceptors.request.use((config) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    console.log('token',token)
+    const state = store.getState();
+    const token = state.auth.accessToken;
+
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
 });
 
+// Ответы: перехватываем 401 и пробуем обновить токен
 axiosClient.interceptors.response.use(
     (response) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            // Очистить localStorage и отправить на логин
-            if (typeof window !== 'undefined') {
-                localStorage.removeItem('token');
-                window.location.href = '/login';
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (
+            error.response?.status === 401 &&
+            !originalRequest._retry &&
+            !originalRequest.url.includes('/auth/login')
+        ) {
+            originalRequest._retry = true;
+
+            try {
+                const res = await axios.post(`${API_URL}/auth/refresh`, {}, {withCredentials: true});
+
+                const newAccessToken = res.data.access_token;
+                store.dispatch(setAccessToken(newAccessToken));
+
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return axiosClient(originalRequest);
+            } catch (refreshError) {
+                store.dispatch(setAccessToken(null));
+                // if (typeof window !== 'undefined') {
+                //     window.location.href = '/login';
+                // }
+                return Promise.reject(refreshError);
             }
         }
+
         return Promise.reject(error);
     }
 );

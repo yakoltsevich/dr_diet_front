@@ -1676,3 +1676,5 @@ export const MOCKED_MENU = [
         }
     }
 ]
+
+export const PUBLIC_ROUTES = ['/login', '/register', '/about', '/terms', '/register','/learn-more', '/'];

@@ -6,9 +6,9 @@ import { Input } from '@heroui/input';
 import { CardBody, Card } from '@heroui/card';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { axiosClient } from "@/lib/axiosClient";
-import { useDispatch } from "react-redux";
-import { setIsAuthenticated } from "@/store/slices/authSlice";
+import { axiosClient } from '@/lib/axiosClient';
+import { useDispatch } from 'react-redux';
+import { setAccessToken } from '@/store/slices/authSlice';
 
 export const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,10 +20,12 @@ export const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
+
         try {
-            const { data } = await axiosClient.post('auth/login', { email, password });
-            localStorage.setItem('token', data.access_token);
-            dispatch(setIsAuthenticated(true));
+            const { data } = await axiosClient.post('auth/login', { email, password }, { withCredentials: true });
+
+            dispatch(setAccessToken(data.access_token)); // сохраняем access token в Redux
+
             router.push('/');
         } catch (err) {
             console.error(err);

@@ -3,13 +3,10 @@
 import {Avatar} from '@heroui/avatar';
 import {Icon} from "@/components/common/Icon";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useState} from "react";
-import {axiosClient} from "@/lib/axiosClient";
-import {useSelector} from "react-redux";
+import {useAuth} from "@/context/AuthContext";
 
 export const ProfileHeader = () => {
-    const {isAuthenticated, user} = useSelector(state => state.auth);
-    console.log('ProfileHeader', user)
+    const {user} = useAuth();
     return (
         <div className="flex items-center text-center gap-4 ">
             <Avatar

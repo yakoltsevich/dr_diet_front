@@ -3,7 +3,6 @@
 import { MealCard } from "@/components/weekMenu/MealCard";
 
 export const DayMeals = ({ day }) => {
-    console.log('DayMeals', day);
     if (!day) return null;
 
     return (
