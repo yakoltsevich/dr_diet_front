@@ -1678,3 +1678,17 @@ export const MOCKED_MENU = [
 ]
 
 export const PUBLIC_ROUTES = ['/login', '/register', '/about', '/terms', '/register','/learn-more', '/'];
+
+export const MENU_ROUTES = [{
+    route: '/menu',
+    title: 'Menu',
+},{
+    route: '/profile',
+    title: 'Profile',
+},{
+    route: '/groceries',
+    title: 'Grocery',
+},{
+    route: '/diary',
+    title: 'Diary',
+},]

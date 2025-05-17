@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar } from "@heroui/avatar";
+import {Avatar} from "@heroui/avatar";
 import {
     Dropdown,
     DropdownItem,
@@ -16,15 +16,16 @@ import {
     NavbarItem,
 } from "@heroui/navbar";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Button } from "@heroui/button";
-import { useDispatch, useSelector } from "react-redux";
+import {useRouter} from "next/navigation";
+import {Button} from "@heroui/button";
+import {useDispatch, useSelector} from "react-redux";
 import {useAuth} from "@/context/AuthContext";
+import {MENU_ROUTES} from "@/shared/constants";
 
 export const SideMenu = () => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const { user, isAuthenticated, logout } = useAuth();
+    const {user, isAuthenticated, logout} = useAuth();
 
     const onPressSignUp = () => {
         router.push('/login');
@@ -59,26 +60,13 @@ export const SideMenu = () => {
                         </DropdownSection>
 
                         <DropdownSection showDivider>
-                            <DropdownItem onPress={()=>router.push("/menu")}>
-                                <Link href="/menu" color="foreground" className="text-sm">
-                                    Menu
-                                </Link>
-                            </DropdownItem>
-                            <DropdownItem onPress={()=>router.push("/profile")}>
-                                <Link href="/profile" color="foreground" className="text-sm">
-                                    Profile
-                                </Link>
-                            </DropdownItem>
-                            <DropdownItem  onPress={()=>router.push("/groceries")}>
-                                <Link
-                                    href="/groceries"
-                                    color="foreground"
-                                    className="text-sm"
-                                >
-                                    Groceries
-                                </Link>
-                            </DropdownItem>
-                            <DropdownItem key="settings">Settings</DropdownItem>
+                            {MENU_ROUTES.map(({route, title}) => (
+                                <DropdownItem key={route} onPress={() => router.push(route)}>
+                                    <Link href={route} color="foreground" className="text-sm">
+                                        {title}
+                                    </Link>
+                                </DropdownItem>
+                            ))}
                         </DropdownSection>
 
                         <DropdownSection>
