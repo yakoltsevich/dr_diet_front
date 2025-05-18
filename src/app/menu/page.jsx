@@ -6,7 +6,7 @@ import { axiosClient } from '@/lib/axiosClient';
 import { WeekMenu } from "@/components/weekMenu/WeekMenu";
 import { MOCKED_MENU } from "@/shared/constants";
 
-export default () => {
+export default function Menu() {
     const [menu, setMenu] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);

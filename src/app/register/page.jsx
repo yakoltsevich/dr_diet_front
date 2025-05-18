@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { axiosClient } from "@/lib/axiosClient";
 import { useDispatch } from "react-redux";
 
-export const Register = () => {
+export default function Page() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -70,5 +70,3 @@ export const Register = () => {
         </div>
     );
 };
-
-export default Register;
