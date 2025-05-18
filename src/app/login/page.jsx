@@ -10,7 +10,7 @@ import { axiosClient } from '@/lib/axiosClient';
 import { useDispatch } from 'react-redux';
 import { setAccessToken } from '@/store/slices/authSlice';
 
-export const Login = () => {
+export default function Page() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -23,9 +23,7 @@ export const Login = () => {
 
         try {
             const { data } = await axiosClient.post('auth/login', { email, password }, { withCredentials: true });
-
-            dispatch(setAccessToken(data.access_token)); // сохраняем access token в Redux
-
+            dispatch(setAccessToken(data.access_token));
             router.push('/');
         } catch (err) {
             console.error(err);
@@ -72,6 +70,4 @@ export const Login = () => {
             </Card>
         </div>
     );
-};
-
-export default Login;
+}

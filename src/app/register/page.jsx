@@ -7,7 +7,6 @@ import { Card, CardBody } from '@heroui/card';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { axiosClient } from "@/lib/axiosClient";
-import { setIsAuthenticated } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
 export const Register = () => {
@@ -24,7 +23,6 @@ export const Register = () => {
         try {
             const { data } = await axiosClient.post('/users', { email, password });
             localStorage.setItem('token', data.access_token);
-            dispatch(setIsAuthenticated(true));
             router.push('/');
         } catch (err) {
             console.error(err);
