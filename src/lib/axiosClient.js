@@ -2,7 +2,7 @@ import axios from 'axios';
 import {store} from '@/store'; // путь до твоего redux store
 import {setAccessToken} from '@/store/slices/authSlice';
 
-const API_URL = 'http://localhost:3000'; // замени на реальный адрес
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const axiosClient = axios.create({
     baseURL: API_URL,

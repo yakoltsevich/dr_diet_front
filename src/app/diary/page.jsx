@@ -1,48 +1,57 @@
 'use client';
 
-import {useState} from 'react';
-import {Card, CardBody} from '@heroui/card';
-import {Button} from '@heroui/button';
-
-import {Icon} from "@/components/common/Icon";
-import {faTrash} from "@fortawesome/free-solid-svg-icons";
-
-const mockMeals = [
-    {
-        id: 1,
-        name: 'Завтрак',
-        type: 'breakfast',
-        ingredients: [
-            {
-                ingredient: {name: 'Овсянка', calories: 350, protein: 12, fat: 5, carbs: 60},
-                weight: 100,
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Обед',
-        type: 'lunch',
-        ingredients: [
-            {
-                ingredient: {name: 'Куриная грудка', calories: 165, protein: 31, fat: 3, carbs: 0},
-                weight: 200,
-            },
-            {
-                ingredient: {name: 'Рис', calories: 230, protein: 5, fat: 2, carbs: 50},
-                weight: 150,
-            },
-        ],
-    },
-];
+import { useEffect, useState } from 'react';
+import { Card, CardBody } from '@heroui/card';
+import { Button } from '@heroui/button';
+import { Input } from '@heroui/input';
+import { Icon } from '@/components/common/Icon';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
+import { axiosClient } from '@/lib/axiosClient';
 
 export default function NutritionDiaryPage() {
-    const [meals, setMeals] = useState(mockMeals);
+    const [meals, setMeals] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState(() =>
+        new Date().toISOString().split('T')[0]
+    );
+
+    const router = useRouter();
+
+    const loadMeals = async () => {
+        setLoading(true);
+        try {
+            const res = await axiosClient.get('/meals', {
+                params: { date: selectedDate },
+            });
+            setMeals(res.data);
+        } catch (err) {
+            console.error('Ошибка при загрузке приёмов пищи:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadMeals();
+    }, [selectedDate]);
+
+    const handleDelete = async (id) => {
+        const confirmed = confirm('Удалить этот приём пищи?');
+        if (!confirmed) return;
+
+        try {
+            await axiosClient.delete(`/meals/${id}`);
+            setMeals((prev) => prev.filter((meal) => meal.id !== id));
+        } catch (err) {
+            alert(err?.response?.data?.message || 'Ошибка при удалении');
+        }
+    };
 
     const getTotal = () => {
         return meals.reduce(
             (acc, meal) => {
-                meal.ingredients.forEach(({ingredient, weight}) => {
+                meal.ingredients.forEach(({ ingredient, weight }) => {
                     const ratio = weight / 100;
                     acc.calories += ingredient.calories * ratio;
                     acc.protein += ingredient.protein * ratio;
@@ -51,7 +60,7 @@ export default function NutritionDiaryPage() {
                 });
                 return acc;
             },
-            {calories: 0, protein: 0, fat: 0, carbs: 0}
+            { calories: 0, protein: 0, fat: 0, carbs: 0 }
         );
     };
 
@@ -60,44 +69,66 @@ export default function NutritionDiaryPage() {
     return (
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
             <h1 className="text-2xl font-semibold text-center text-[#353535]">Nutrition Diary</h1>
-            <p className="text-center text-sm text-muted-foreground">Friday, May 16</p>
 
-            <div className="space-y-4">
-                {meals.map((meal) => (
-                    <Card key={meal.id}>
-                        <CardBody className="p-4 space-y-2">
-                            <div className="flex justify-between items-center">
-                                <h2 className="font-semibold text-lg">{meal.name}</h2>
-                                <Button isIconOnly size="icon" variant="ghost">
-                                    <Icon icon={faTrash}/>
-                                </Button>
-                            </div>
-                            <ul className="space-y-1">
-                                {meal.ingredients.map(({ingredient, weight}, idx) => {
-                                    const ratio = weight / 100;
-                                    return (
-                                        <li key={idx} className="text-sm text-muted-foreground">
-                                            {weight} г {ingredient.name} —{' '}
-                                            {(ingredient.calories * ratio).toFixed(0)} ккал ·{' '}
-                                            {(ingredient.protein * ratio).toFixed(0)}г Б ·{' '}
-                                            {(ingredient.fat * ratio).toFixed(0)}г Ж ·{' '}
-                                            {(ingredient.carbs * ratio).toFixed(0)}г У
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </CardBody>
-                    </Card>
-                ))}
+            <div className="flex justify-center">
+                <Input
+                    type="date"
+                    className="w-[200px]"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                />
             </div>
 
-            <div className="bg-[#f3f3f2] rounded-xl p-4 text-sm text-center shadow-inner text-[#353535]">
-                <strong>Total:</strong> {totals.calories.toFixed(0)} ккал ·{' '}
-                {totals.protein.toFixed(0)}г Б · {totals.fat.toFixed(0)}г Ж ·{' '}
-                {totals.carbs.toFixed(0)}г У
-            </div>
+            {loading ? (
+                <p className="text-center text-muted-foreground">Загрузка...</p>
+            ) : (
+                <>
+                    <div className="space-y-4">
+                        {meals.map((meal) => (
+                            <Card key={meal.id}>
+                                <CardBody className="p-4 space-y-2">
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="font-semibold text-lg">{meal.name}</h2>
+                                        <Button
+                                            isIconOnly
+                                            size="icon"
+                                            variant="ghost"
+                                            onPress={() => handleDelete(meal.id)}
+                                        >
+                                            <Icon icon={faTrash} />
+                                        </Button>
+                                    </div>
+                                    <ul className="space-y-1">
+                                        {meal.ingredients.map(({ ingredient, weight }, idx) => {
+                                            const ratio = weight / 100;
+                                            return (
+                                                <li key={idx} className="text-sm text-muted-foreground">
+                                                    {weight} г {ingredient.name} —{' '}
+                                                    {(ingredient.calories * ratio).toFixed(0)} ккал ·{' '}
+                                                    {(ingredient.protein * ratio).toFixed(0)}г Б ·{' '}
+                                                    {(ingredient.fat * ratio).toFixed(0)}г Ж ·{' '}
+                                                    {(ingredient.carbs * ratio).toFixed(0)}г У
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </CardBody>
+                            </Card>
+                        ))}
+                    </div>
 
-            <Button className="w-full bg-[#5e7a76] text-white rounded-2xl shadow-lg hover:bg-[#4d6965]">
+                    <div className="bg-[#f3f3f2] rounded-xl p-4 text-sm text-center shadow-inner text-[#353535]">
+                        <strong>Total:</strong> {totals.calories.toFixed(0)} ккал ·{' '}
+                        {totals.protein.toFixed(0)}г Б · {totals.fat.toFixed(0)}г Ж ·{' '}
+                        {totals.carbs.toFixed(0)}г У
+                    </div>
+                </>
+            )}
+
+            <Button
+                onPress={() => router.push('/diary/add')}
+                className="w-full bg-[#5e7a76] text-white rounded-2xl shadow-lg hover:bg-[#4d6965]"
+            >
                 Add Meal
             </Button>
         </div>

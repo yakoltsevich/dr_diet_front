@@ -1,34 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from '@heroui/input';
 import { Select, SelectItem } from '@heroui/select';
 import { Button } from '@heroui/button';
 import { Card, CardBody } from '@heroui/card';
 import { Icon } from '@/components/common/Icon';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-
-const MOCK_INGREDIENTS = [
-    { id: 1, name: 'Овсянка' },
-    { id: 2, name: 'Яйцо' },
-    { id: 3, name: 'Авокадо' },
-];
+import { AddIngredientModal } from '@/components/ingredient/AddIngredientModal';
+import { axiosClient } from '@/lib/axiosClient'; // путь подкорректируй при необходимости
+import { useRouter } from 'next/navigation';
 
 const MEAL_TYPES = [
-    { value: 'breakfast', label: 'Завтрак' },
-    { value: 'lunch', label: 'Обед' },
-    { value: 'dinner', label: 'Ужин' },
-    { value: 'snack', label: 'Перекус' },
-    { value: 'afternoon_snack', label: 'Полдник' },
+    { value: 'breakfast', label: 'Breakfast' },
+    { value: 'lunch', label: 'Lunch' },
+    { value: 'dinner', label: 'Dinner' },
+    { value: 'snack', label: 'Snack' },
+    { value: 'afternoon_snack', label: 'Afternoon snack' },
 ];
 
 export default function AddMealPage() {
     const [name, setName] = useState('');
     const [type, setType] = useState('breakfast');
     const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
-    const [ingredients, setIngredients] = useState([
-        { ingredientId: '', weight: '' },
-    ]);
+    const [ingredients, setIngredients] = useState([{ ingredientId: '', weight: '' }]);
+    const [availableIngredients, setAvailableIngredients] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
+    const router = useRouter();
+
+    useEffect(() => {
+        axiosClient.get('/ingredients')
+            .then((res) => setAvailableIngredients(res.data))
+            .catch((err) => console.error('Ошибка при загрузке ингредиентов', err));
+    }, []);
 
     const updateIngredient = (index, field, value) => {
         const newList = [...ingredients];
@@ -44,18 +49,23 @@ export default function AddMealPage() {
         setIngredients(ingredients.filter((_, i) => i !== index));
     };
 
-    const handleSubmit = () => {
-        const payload = {
-            name,
-            type,
-            date,
-            ingredients: ingredients.map((i) => ({
-                ingredientId: parseInt(i.ingredientId),
-                weight: parseFloat(i.weight),
-            })),
-        };
-        console.log('submit payload:', payload);
-        // TODO: call API (POST /meals)
+    const handleSubmit = async () => {
+        try {
+            const payload = {
+                name,
+                type,
+                date,
+                ingredients: ingredients.map((i) => ({
+                    ingredientId: parseInt(i.ingredientId),
+                    weight: parseFloat(i.weight),
+                })),
+            };
+
+            await axiosClient.post('/meals', payload);
+            router.push('/diary'); // после создания перенаправляем обратно
+        } catch (error) {
+            alert(error?.response?.data?.message || 'Ошибка при сохранении приёма пищи');
+        }
     };
 
     return (
@@ -101,7 +111,7 @@ export default function AddMealPage() {
                                         updateIngredient(index, 'ingredientId', Array.from(keys)[0])
                                     }
                                 >
-                                    {MOCK_INGREDIENTS.map((ingr) => (
+                                    {availableIngredients.map((ingr) => (
                                         <SelectItem key={ingr.id}>{ingr.name}</SelectItem>
                                     ))}
                                 </Select>
@@ -124,10 +134,33 @@ export default function AddMealPage() {
                             </div>
                         ))}
 
-                        <Button variant="outline" onPress={addIngredient}>
-                            + Add Ingredient
-                        </Button>
+                        <div className="flex gap-2 flex-wrap">
+                            <Button variant="outline" onPress={addIngredient}>
+                                + Add Ingredient
+                            </Button>
+                            <Button variant="outline" onPress={() => setShowModal(true)}>
+                                + New Ingredient
+                            </Button>
+                        </div>
                     </div>
+
+                    <AddIngredientModal
+                        isOpen={showModal}
+                        onClose={() => setShowModal(false)}
+                        onCreated={(newIngredient) => {
+                            // Добавляем в доступный список
+                            setAvailableIngredients((prev) => [...prev, newIngredient]);
+
+                            // Добавляем новую строку в форму с этим ингредиентом
+                            setIngredients((prev) => [
+                                ...prev,
+                                {
+                                    ingredientId: newIngredient.id.toString(),
+                                    weight: '',
+                                },
+                            ]);
+                        }}
+                    />
 
                     <Button
                         className="w-full bg-[#5e7a76] text-white rounded-2xl shadow-md hover:bg-[#4d6965]"
