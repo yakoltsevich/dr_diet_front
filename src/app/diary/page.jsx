@@ -12,9 +12,8 @@ import { axiosClient } from '@/lib/axiosClient';
 export default function NutritionDiaryPage() {
     const [meals, setMeals] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedDate, setSelectedDate] = useState(() =>
-        new Date().toISOString().split('T')[0]
-    );
+    const [dateFrom, setDateFrom] = useState(() => new Date().toISOString().split('T')[0]);
+    const [dateTo, setDateTo] = useState(() => new Date().toISOString().split('T')[0]);
 
     const router = useRouter();
 
@@ -22,7 +21,10 @@ export default function NutritionDiaryPage() {
         setLoading(true);
         try {
             const res = await axiosClient.get('/meals', {
-                params: { date: selectedDate },
+                params: {
+                    dateFrom,
+                    dateTo,
+                },
             });
             setMeals(res.data);
         } catch (err) {
@@ -33,8 +35,10 @@ export default function NutritionDiaryPage() {
     };
 
     useEffect(() => {
-        loadMeals();
-    }, [selectedDate]);
+        if (dateFrom && dateTo) {
+            loadMeals();
+        }
+    }, [dateFrom, dateTo]);
 
     const handleDelete = async (id) => {
         const confirmed = confirm('Удалить этот приём пищи?');
@@ -70,12 +74,18 @@ export default function NutritionDiaryPage() {
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
             <h1 className="text-2xl font-semibold text-center text-[#353535]">Nutrition Diary</h1>
 
-            <div className="flex justify-center">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Input
                     type="date"
                     className="w-[200px]"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                />
+                <Input
+                    type="date"
+                    className="w-[200px]"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
                 />
             </div>
 
