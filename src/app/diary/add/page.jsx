@@ -6,7 +6,7 @@ import {Select, SelectItem} from '@heroui/select';
 import {Button} from '@heroui/button';
 import {Card, CardBody} from '@heroui/card';
 import {Icon} from '@/components/common/Icon';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faTrash, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import {AddIngredientModal} from '@/components/ingredient/AddIngredientModal';
 import {axiosClient} from '@/lib/axiosClient'; // путь подкорректируй при необходимости
 import {useRouter} from 'next/navigation';
@@ -117,13 +117,13 @@ export default function AddMealPage() {
                                     value={ing.weight}
                                     onValueChange={(value) => updateIngredient(index, 'weight', value)}
                                 />
-
                                 <Button
                                     variant={'light'}
+                                    className={'text-gray-700'}
                                     isIconOnly
                                     onPress={() => removeIngredient(index)}
                                 >
-                                    <Icon icon={faTrash}/>
+                                    <Icon icon={faTrashCan}/>
                                 </Button>
                             </div>
                         ))}

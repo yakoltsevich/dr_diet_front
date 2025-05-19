@@ -13,6 +13,7 @@ import { setAccessToken } from '@/store/slices/authSlice';
 export default function Page() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const router = useRouter();
     const dispatch = useDispatch();
@@ -20,14 +21,17 @@ export default function Page() {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
-
+        setLoading(true)
         try {
             const { data } = await axiosClient.post('auth/login', { email, password }, { withCredentials: true });
+
             dispatch(setAccessToken(data.access_token));
             router.push('/');
         } catch (err) {
             console.error(err);
             setError(err.response?.data?.message || 'Login error');
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -56,7 +60,7 @@ export default function Page() {
                             required
                         />
                         {error && <div className="text-red-500 text-sm">{error}</div>}
-                        <Button type="submit" className="w-full">
+                        <Button isLoading={loading} type="submit" className="w-full">
                             Log In
                         </Button>
                     </form>

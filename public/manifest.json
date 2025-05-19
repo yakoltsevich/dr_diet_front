@@ -1,0 +1,21 @@
+{
+  "name": "Dr Diet App",
+  "short_name": "DrDiet",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f3f2",
+  "theme_color": "#5e7a76",
+  "description": "Menu and Food Diary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

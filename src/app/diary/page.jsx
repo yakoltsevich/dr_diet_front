@@ -5,7 +5,7 @@ import { Card, CardBody } from '@heroui/card';
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Icon } from '@/components/common/Icon';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faTrash, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { axiosClient } from '@/lib/axiosClient';
 
@@ -100,12 +100,12 @@ export default function NutritionDiaryPage() {
                                     <div className="flex justify-between items-center">
                                         <h2 className="font-semibold text-lg">{meal.name}</h2>
                                         <Button
+                                            variant={'light'}
                                             isIconOnly
-                                            size="icon"
-                                            variant="ghost"
+                                            className={'text-gray-700'}
                                             onPress={() => handleDelete(meal.id)}
                                         >
-                                            <Icon icon={faTrash} />
+                                            <Icon icon={faTrashCan}/>
                                         </Button>
                                     </div>
                                     <ul className="space-y-1">
