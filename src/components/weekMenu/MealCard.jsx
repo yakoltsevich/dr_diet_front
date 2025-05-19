@@ -10,7 +10,7 @@ export const MealCard = (meal) => {
 
     return (
         <>
-            <div className="bg-white p-4 rounded-xl shadow-md flex items-start gap-4">
+            <div className="bg-white p-4 rounded-xl shadow-md flex flex-col sm:flex-row items-start gap-4">
                 <div className="flex-1 space-y-1 text-sm text-textColor">
                     <div>{meal.type}</div>
                     <div className="text-lg font-semibold">{meal.title}</div>

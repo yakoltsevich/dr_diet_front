@@ -10,7 +10,7 @@ export const WeekMenu = ({menu = []}) => {
     return (
         <div className="flex bg-lightColor rounded-lg overflow-hidden shadow-lg">
             <MenuSidebar menu={menu} activeDay={activeDay} setActiveDay={setActiveDay}/>
-            <DayMeals day={menu[activeDay]}/>
+            <DayMeals  activeDay={activeDay} setActiveDay={setActiveDay} day={menu[activeDay]}/>
         </div>
     );
 }
