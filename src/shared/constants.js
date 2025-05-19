@@ -1691,7 +1691,11 @@ export const MENU_ROUTES = [{
 }, {
     route: '/diary',
     title: 'Diary',
-},]
+}, {
+    route: '/settings',
+    title: 'Settings',
+},
+]
 
 
 export const MEAL_TYPES_OPTIONS = [
