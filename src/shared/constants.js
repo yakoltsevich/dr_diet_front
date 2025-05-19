@@ -1677,18 +1677,35 @@ export const MOCKED_MENU = [
     }
 ]
 
-export const PUBLIC_ROUTES = ['/login', '/register', '/about', '/terms', '/register','/learn-more', '/'];
+export const PUBLIC_ROUTES = ['/login', '/register', '/about', '/terms', '/register', '/learn-more', '/'];
 
 export const MENU_ROUTES = [{
     route: '/menu',
     title: 'Menu',
-},{
+}, {
     route: '/profile',
     title: 'Profile',
-},{
+}, {
     route: '/groceries',
     title: 'Grocery',
-},{
+}, {
     route: '/diary',
     title: 'Diary',
 },]
+
+
+export const MEAL_TYPES_OPTIONS = [
+    {value: 'breakfast', label: 'Breakfast'},
+    {value: 'lunch', label: 'Lunch'},
+    {value: 'dinner', label: 'Dinner'},
+    {value: 'snack', label: 'Snack'},
+    {value: 'afternoon_snack', label: 'Afternoon snack'},
+];
+
+export const MEAL_TYPES = {
+    breakfast: 'Breakfast',
+    lunch: 'Lunch',
+    dinner: 'Dinner',
+    snack: 'Snack',
+    afternoon_snack: 'Afternoon snack',
+}

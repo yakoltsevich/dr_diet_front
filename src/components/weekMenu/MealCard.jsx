@@ -3,6 +3,7 @@
 import { Button } from '@heroui/button';
 import { RecipeModal } from "@/components/weekMenu/RecipeModal";
 import { useState } from "react";
+import {MEAL_TYPES} from "@/shared/constants";
 
 export const MealCard = (meal) => {
     console.log('MealCard', meal);
@@ -12,7 +13,7 @@ export const MealCard = (meal) => {
         <>
             <div className="bg-white p-4 rounded-xl shadow-md flex flex-col sm:flex-row items-start gap-4">
                 <div className="flex-1 space-y-1 text-sm text-textColor">
-                    <div>{meal.type}</div>
+                    <div>{MEAL_TYPES[meal.type]}</div>
                     <div className="text-lg font-semibold">{meal.title}</div>
                     <div className="flex gap-2 text-primaryColor">
                         <div>{meal.calories} kcal</div>

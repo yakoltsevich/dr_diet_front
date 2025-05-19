@@ -1,29 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Input } from '@heroui/input';
-import { Select, SelectItem } from '@heroui/select';
-import { Button } from '@heroui/button';
-import { Card, CardBody } from '@heroui/card';
-import { Icon } from '@/components/common/Icon';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { AddIngredientModal } from '@/components/ingredient/AddIngredientModal';
-import { axiosClient } from '@/lib/axiosClient'; // путь подкорректируй при необходимости
-import { useRouter } from 'next/navigation';
-
-const MEAL_TYPES = [
-    { value: 'breakfast', label: 'Breakfast' },
-    { value: 'lunch', label: 'Lunch' },
-    { value: 'dinner', label: 'Dinner' },
-    { value: 'snack', label: 'Snack' },
-    { value: 'afternoon_snack', label: 'Afternoon snack' },
-];
+import {useEffect, useState} from 'react';
+import {Input} from '@heroui/input';
+import {Select, SelectItem} from '@heroui/select';
+import {Button} from '@heroui/button';
+import {Card, CardBody} from '@heroui/card';
+import {Icon} from '@/components/common/Icon';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {AddIngredientModal} from '@/components/ingredient/AddIngredientModal';
+import {axiosClient} from '@/lib/axiosClient'; // путь подкорректируй при необходимости
+import {useRouter} from 'next/navigation';
+import {NumberInput} from "@heroui/react";
+import {MEAL_TYPES_OPTIONS} from "@/shared/constants";
 
 export default function AddMealPage() {
     const [name, setName] = useState('');
     const [type, setType] = useState('breakfast');
     const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
-    const [ingredients, setIngredients] = useState([{ ingredientId: '', weight: '' }]);
+    const [ingredients, setIngredients] = useState([{ingredientId: '', weight: ''}]);
     const [availableIngredients, setAvailableIngredients] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
@@ -42,7 +36,7 @@ export default function AddMealPage() {
     };
 
     const addIngredient = () => {
-        setIngredients([...ingredients, { ingredientId: '', weight: '' }]);
+        setIngredients([...ingredients, {ingredientId: '', weight: ''}]);
     };
 
     const removeIngredient = (index) => {
@@ -78,7 +72,7 @@ export default function AddMealPage() {
                         label="Meal Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Завтрак"
+                        placeholder="Meal"
                     />
 
                     <Select
@@ -86,7 +80,7 @@ export default function AddMealPage() {
                         selectedKeys={[type]}
                         onSelectionChange={(keys) => setType(Array.from(keys)[0])}
                     >
-                        {MEAL_TYPES.map((opt) => (
+                        {MEAL_TYPES_OPTIONS.map((opt) => (
                             <SelectItem key={opt.value}>{opt.label}</SelectItem>
                         ))}
                     </Select>
@@ -116,20 +110,20 @@ export default function AddMealPage() {
                                     ))}
                                 </Select>
 
-                                <Input
-                                    type="number"
+                                <NumberInput
                                     className="w-32"
                                     label="Grams"
+                                    minValue={0}
                                     value={ing.weight}
-                                    onChange={(e) => updateIngredient(index, 'weight', e.target.value)}
+                                    onValueChange={(value) => updateIngredient(index, 'weight', value)}
                                 />
 
                                 <Button
-                                    size="icon"
-                                    variant="ghost"
+                                    variant={'light'}
+                                    isIconOnly
                                     onPress={() => removeIngredient(index)}
                                 >
-                                    <Icon icon={faTrash} className="text-red-500" />
+                                    <Icon icon={faTrash}/>
                                 </Button>
                             </div>
                         ))}
