@@ -4,9 +4,6 @@ import withPWA from 'next-pwa';
 const nextConfig = {
     output: 'standalone', // ✅ важно для Render
     reactStrictMode: true,
-    experimental: {
-        appDir: true,
-    },
 };
 
 export default withPWA({
