@@ -1,17 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardBody } from '@heroui/card';
-import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { Icon } from '@/components/common/Icon';
-import {faTrash, faTrashCan} from '@fortawesome/free-solid-svg-icons';
-import { useRouter } from 'next/navigation';
-import { axiosClient } from '@/lib/axiosClient';
+import {useEffect, useState} from 'react';
+import {Card, CardBody} from '@heroui/card';
+import {Button} from '@heroui/button';
+import {Input} from '@heroui/input';
+import {Icon} from '@/components/common/Icon';
+import {faTrashCan, faPen} from '@fortawesome/free-solid-svg-icons';
+import {useRouter} from 'next/navigation';
+import {axiosClient} from '@/lib/axiosClient';
+import {Checkbox} from '@heroui/react';
 
 export default function NutritionDiaryPage() {
     const [meals, setMeals] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [rangeEnabled, setRangeEnabled] = useState(false);
     const [dateFrom, setDateFrom] = useState(() => new Date().toISOString().split('T')[0]);
     const [dateTo, setDateTo] = useState(() => new Date().toISOString().split('T')[0]);
 
@@ -23,7 +25,7 @@ export default function NutritionDiaryPage() {
             const res = await axiosClient.get('/meals', {
                 params: {
                     dateFrom,
-                    dateTo,
+                    dateTo: rangeEnabled ? dateTo : dateFrom,
                 },
             });
             setMeals(res.data);
@@ -35,10 +37,10 @@ export default function NutritionDiaryPage() {
     };
 
     useEffect(() => {
-        if (dateFrom && dateTo) {
+        if (dateFrom) {
             loadMeals();
         }
-    }, [dateFrom, dateTo]);
+    }, [dateFrom, dateTo, rangeEnabled]);
 
     const handleDelete = async (id) => {
         const confirmed = confirm('Удалить этот приём пищи?');
@@ -55,7 +57,7 @@ export default function NutritionDiaryPage() {
     const getTotal = () => {
         return meals.reduce(
             (acc, meal) => {
-                meal.ingredients.forEach(({ ingredient, weight }) => {
+                meal.ingredients.forEach(({ingredient, weight}) => {
                     const ratio = weight / 100;
                     acc.calories += ingredient.calories * ratio;
                     acc.protein += ingredient.protein * ratio;
@@ -64,7 +66,7 @@ export default function NutritionDiaryPage() {
                 });
                 return acc;
             },
-            { calories: 0, protein: 0, fat: 0, carbs: 0 }
+            {calories: 0, protein: 0, fat: 0, carbs: 0}
         );
     };
 
@@ -74,18 +76,27 @@ export default function NutritionDiaryPage() {
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
             <h1 className="text-2xl font-semibold text-center text-[#353535]">Nutrition Diary</h1>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex justify-center gap-2">
                 <Input
                     type="date"
-                    className="w-[200px]"
+                    className="w-full sm:w-48"
                     value={dateFrom}
-                    onChange={(e) => setDateFrom(e.target.value)}
+                    onValueChange={setDateFrom}
+                />
+                <Checkbox
+                    classNames={{
+                        base: 'baseAnchor m-0 p-0',
+                        wrapper: 'wrapperAnchor m-0',
+                    }}
+                    isSelected={rangeEnabled}
+                    onValueChange={setRangeEnabled}
                 />
                 <Input
                     type="date"
-                    className="w-[200px]"
-                    value={dateTo}
-                    onChange={(e) => setDateTo(e.target.value)}
+                    isDisabled={!rangeEnabled}
+                    className="w-full sm:w-48"
+                    value={rangeEnabled ? dateTo : ''}
+                    onValueChange={setDateTo}
                 />
             </div>
 
@@ -97,19 +108,29 @@ export default function NutritionDiaryPage() {
                         {meals.map((meal) => (
                             <Card key={meal.id}>
                                 <CardBody className="p-4 space-y-2">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-start gap-2">
                                         <h2 className="font-semibold text-lg">{meal.name}</h2>
-                                        <Button
-                                            variant={'light'}
-                                            isIconOnly
-                                            className={'text-gray-700'}
-                                            onPress={() => handleDelete(meal.id)}
-                                        >
-                                            <Icon icon={faTrashCan}/>
-                                        </Button>
+                                        <div className="flex gap-1">
+                                            <Button
+                                                variant="light"
+                                                isIconOnly
+                                                className="text-gray-700"
+                                                onPress={() => router.push(`/diary/edit/${meal.id}`)}
+                                            >
+                                                <Icon icon={faPen} />
+                                            </Button>
+                                            <Button
+                                                variant="light"
+                                                isIconOnly
+                                                className="text-gray-700"
+                                                onPress={() => handleDelete(meal.id)}
+                                            >
+                                                <Icon icon={faTrashCan} />
+                                            </Button>
+                                        </div>
                                     </div>
                                     <ul className="space-y-1">
-                                        {meal.ingredients.map(({ ingredient, weight }, idx) => {
+                                        {meal.ingredients.map(({ingredient, weight}, idx) => {
                                             const ratio = weight / 100;
                                             return (
                                                 <li key={idx} className="text-sm text-muted-foreground">
