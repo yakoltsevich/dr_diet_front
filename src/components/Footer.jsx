@@ -10,5 +10,6 @@ export const Footer = () => {
                 <a href="/terms" className="hover:underline">Terms of Use</a>
             </div>
         </footer>
+
     );
 };

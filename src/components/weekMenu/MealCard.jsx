@@ -6,7 +6,6 @@ import { useState } from "react";
 import {MEAL_TYPES} from "@/shared/constants";
 
 export const MealCard = (meal) => {
-    console.log('MealCard', meal);
     const [open, setOpen] = useState(false);
 
     return (

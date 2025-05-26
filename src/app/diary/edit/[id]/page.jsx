@@ -13,7 +13,7 @@ export default function EditMealPage() {
     const queryClient = useQueryClient();
 
     const {meal, loading: loadingMeal} = useMeal(id);
-    const {ingredients: availableIngredients, loading: loadingIngredients} = useIngredients();
+    const {ingredients: availableIngredients, loading: loadingIngredients, refetch} = useIngredients();
 
     const {mutate: updateMeal, isPending} = useMutation({
         mutationFn: async (data) => {
@@ -50,6 +50,7 @@ export default function EditMealPage() {
             ) : (
                 <MealForm
                     initialData={initialData}
+                    refetchAvailableIngredients={refetch}
                     availableIngredients={availableIngredients}
                     onSubmit={updateMeal}
                     isSubmitting={isPending}

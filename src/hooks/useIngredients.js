@@ -9,7 +9,6 @@ export function useIngredients() {
             return res.data;
         },
     });
-
     return {
         ingredients: data || [],
         loading: isLoading,

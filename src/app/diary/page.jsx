@@ -40,7 +40,7 @@ export default function NutritionDiaryPage() {
         if (dateFrom) {
             loadMeals();
         }
-    }, [dateFrom, dateTo, rangeEnabled]);
+    }, [dateFrom, dateTo]);
 
     const handleDelete = async (id) => {
         const confirmed = confirm('Удалить этот приём пищи?');
@@ -76,17 +76,17 @@ export default function NutritionDiaryPage() {
         return <div className="space-y-1">
             {meal.ingredients.map(({ingredient, weight}, idx) => {
                 return (
-                    <div key={idx} className="text-sm text-muted-foreground bg-gray-100 rounded-lg px-2">
-                        <div className='font-semibold'>{ingredient.name} {weight} г</div>
-                        <div className='space-x-1'>
+                    <div key={idx} className="text-sm text-muted-foreground rounded-lg ">
+                        <div className='font-semibold'>- {ingredient.name}: {weight} г</div>
+                        <div className='space-x-2'>
                             <Chip size='sm'
-                                  className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{(ingredient.calories)} ккал</Chip>
+                                  className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{ingredient.calories.toFixed(0)} ккал</Chip>
                             <Chip size='sm'
-                                  className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {(ingredient.protein)}</Chip>
+                                  className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {ingredient.protein.toFixed(0)}</Chip>
                             <Chip size='sm'
-                                  className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {(ingredient.fat)}</Chip>
+                                  className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {ingredient.fat.toFixed(0)}</Chip>
                             <Chip size='sm'
-                                  className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {(ingredient.carbs)}</Chip>
+                                  className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {ingredient.carbs.toFixed(0)}</Chip>
                         </div>
                     </div>
                 );

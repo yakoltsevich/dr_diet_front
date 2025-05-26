@@ -7,13 +7,15 @@ import {Button} from '@heroui/button';
 import {Card, CardBody} from '@heroui/card';
 import {Icon} from '@/components/common/Icon';
 import {faTrashCan} from '@fortawesome/free-solid-svg-icons';
-import {Autocomplete, NumberInput} from "@heroui/react";
+import {Autocomplete, AutocompleteItem, NumberInput} from "@heroui/react";
 import {AddIngredientModal} from '@/components/ingredient/AddIngredientModal';
 import {MEAL_TYPES_OPTIONS} from '@/shared/constants';
+import {axiosClient} from "@/lib/axiosClient";
 
 export default function MealForm({
                                      initialData,
                                      availableIngredients,
+                                     refetchAvailableIngredients,
                                      onSubmit,
                                      isSubmitting = false,
                                      loading = false
@@ -35,7 +37,7 @@ export default function MealForm({
         setMealIngredients([...mealIngredients, {ingredientId: '', weight: ''}]);
     };
 
-    const removeIngredient = (index) => {
+    const removeMealIngredient = (index) => {
         setMealIngredients(mealIngredients.filter((_, i) => i !== index));
     };
 
@@ -51,10 +53,24 @@ export default function MealForm({
         });
     };
 
+    const handleRemoveIngredient = async (id) => {
+        const confirmed = confirm('Удалить этот ингредиент?');
+        if (!confirmed) return;
+
+        try {
+            await axiosClient.delete(`/ingredients/${id}`);
+            refetchAvailableIngredients();
+        } catch (err) {
+            alert(err?.response?.data?.message || 'Ошибка при удалении');
+        }
+    };
+
     if (loading) {
         return <p className="text-center text-muted-foreground">Загрузка ингредиентов...</p>;
     }
     console.log('mealIngredients', mealIngredients);
+    console.log('availableIngredients', availableIngredients);
+    console.log('refetchAvailableIngredients', refetchAvailableIngredients);
     return (
         <Card>
             <CardBody className="space-y-4">
@@ -87,11 +103,11 @@ export default function MealForm({
 
                     {mealIngredients.map((ing, index) => {
                         return (
-                            <div key={index} className="flex items-center gap-2">
+                            <div key={index} className="flex items-center gap-1">
                                 <Autocomplete
                                     className="w-full"
                                     label="Ingredient"
-                                    selectedKey={String(ing.ingredientId)  }
+                                    selectedKey={String(ing.ingredientId)}
                                     onSelectionChange={(key) => {
                                         console.log('keys', key);
                                         if (key) {
@@ -100,26 +116,37 @@ export default function MealForm({
                                     }}
                                 >
                                     {availableIngredients.map((ingr) => (
-                                        <SelectItem key={ingr.id}>{ingr.name}</SelectItem>
+                                        <AutocompleteItem
+                                            hideSelectedIcon
+                                            key={ingr.id}
+                                            endContent={<Button
+                                                variant="light"
+                                                className="text-gray-700 w-5 min-w-5"
+                                                isIconOnly
+                                                onPress={() => handleRemoveIngredient(ingr.id)}
+                                            >
+                                                <Icon icon={faTrashCan}/>
+                                            </Button>}
+                                        >{ingr.name}</AutocompleteItem>
                                     ))}
                                 </Autocomplete>
 
-                                <NumberInput
-                                    className="w-32 min-w-16"
-                                    label="Grams"
-                                    minValue={0}
-                                    value={ing.weight}
-                                    onValueChange={(value) => updateIngredient(index, 'weight', value)}
-                                />
+                                   <NumberInput
+                                       className="w-32 min-w-16"
+                                       label="Grams"
+                                       minValue={0}
+                                       value={ing.weight}
+                                       onValueChange={(value) => updateIngredient(index, 'weight', value)}
+                                   />
 
-                                <Button
-                                    variant="light"
-                                    className="text-gray-700"
-                                    isIconOnly
-                                    onPress={() => removeIngredient(index)}
-                                >
-                                    <Icon icon={faTrashCan}/>
-                                </Button>
+                                   <Button
+                                       variant="light"
+                                       className="text-gray-700 w-5 min-w-5"
+                                       isIconOnly
+                                       onPress={() => removeMealIngredient(index)}
+                                   >
+                                       <Icon icon={faTrashCan}/>
+                                   </Button>
                             </div>
                         )
                     })}
@@ -142,6 +169,7 @@ export default function MealForm({
                             ...prev,
                             {ingredientId: newIngredient.id.toString(), weight: ''},
                         ]);
+                        refetchAvailableIngredients()
                     }}
                 />
 

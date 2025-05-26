@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 import {usePathname} from 'next/navigation';
 import {Header} from '@/components/mainHeader/Header';
 import {Footer} from '@/components/Footer';
+import {BottomNav} from "@/components/BottomNav";
 
 export const ClientLayoutShell = ({children}) => {
     const pathname = usePathname();
@@ -16,6 +17,7 @@ export const ClientLayoutShell = ({children}) => {
             {!hideHeaderAndFooter && <Header/>}
             <main>{children}</main>
             {!hideHeaderAndFooter && <Footer/>}
+            {/*{!hideHeaderAndFooter && <BottomNav/>}*/}
         </div>
     );
 };

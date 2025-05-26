@@ -9,7 +9,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 export default function AddMealPage() {
     const router = useRouter();
     const queryClient = useQueryClient();
-    const {ingredients: availableIngredients, loading} = useIngredients();
+    const {ingredients: availableIngredients, loading, refetch} = useIngredients();
 
     const {mutate: createMeal, isPending} = useMutation({
         mutationFn: async (data) => {
@@ -29,6 +29,7 @@ export default function AddMealPage() {
             <h1 className="text-2xl font-semibold text-center text-[#353535]">Add Meal</h1>
             <MealForm
                 availableIngredients={availableIngredients}
+                refetchAvailableIngredients={refetch}
                 onSubmit={createMeal}
                 isSubmitting={isPending}
                 loading={loading}

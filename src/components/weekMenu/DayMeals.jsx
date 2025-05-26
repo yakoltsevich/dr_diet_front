@@ -2,6 +2,9 @@
 
 import {MealCard} from "@/components/weekMenu/MealCard";
 import {Select, SelectItem} from "@heroui/select";
+import {Icon} from "@/components/common/Icon";
+import {faArrowLeft, faArrowRight, faChevronLeft, faChevronRight, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {Button, ButtonGroup} from "@heroui/button";
 
 export const DAYS = [
     {key: "0", label: "Day 1"},
@@ -22,6 +25,7 @@ const SelectDay = ({activeDay, setActiveDay}) => {
         placeholder="Select an day"
         selectedKeys={new Set(activeDay)}
         variant="faded"
+        radius='none'
         onSelectionChange={onSelectionChange}
     >
         {DAYS.map((animal) => (
@@ -31,11 +35,32 @@ const SelectDay = ({activeDay, setActiveDay}) => {
 }
 export const DayMeals = ({day, activeDay, setActiveDay}) => {
     if (!day) return null;
-
+console.log(day);
+console.log('activeDay',activeDay);
     return (
         <div className="w-full p-4">
             <h2 className="hidden sm:block text-2xl font-bold text-textColor mb-2">Day {day.day}</h2>
-            <SelectDay setActiveDay={setActiveDay} activeDay={activeDay}/>
+            <ButtonGroup className='flex items-center'>
+                <Button
+                    variant="ghost"
+                    isIconOnly
+                    className="text-gray-700 border-gray-200 flex items-center w-7 min-w-7"
+                    isDisabled={Number(activeDay) === 0}
+                    onPress={() => setActiveDay(prev => String(Number(prev) - 1))}
+                >
+                    <Icon icon={faChevronLeft}/>
+                </Button>
+                <SelectDay setActiveDay={setActiveDay} activeDay={activeDay}/>
+                <Button
+                    variant="faded"
+                    isIconOnly
+                    className="text-gray-700 border-gray-200 flex items-center w-7 min-w-7"
+                    isDisabled={Number(activeDay) === (DAYS.length - 1)}
+                    onPress={() => setActiveDay(prev => String(Number(prev) + 1))}
+                >
+                    <Icon icon={faChevronRight}/>
+                </Button>
+            </ButtonGroup>
             {day.total && (
                 <div className="text-primaryColor font-medium mb-4 flex gap-3">
                     <div>{day.total.calories} kcal</div>
