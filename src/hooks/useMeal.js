@@ -8,7 +8,7 @@ export function useMeal(id) {
             const res = await axiosClient.get(`/meals/${id}`);
             return res.data;
         },
-        enabled: !!id, // только если есть id
+        enabled: !!id,
     });
 
     return {

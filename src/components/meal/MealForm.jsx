@@ -25,6 +25,7 @@ export default function MealForm({
     const [showModal, setShowModal] = useState(false);
 
     const updateIngredient = (index, field, value) => {
+        console.log('updateIngredient', index, field, value);
         const newList = [...mealIngredients];
         newList[index][field] = value;
         setMealIngredients(newList);
@@ -90,12 +91,13 @@ export default function MealForm({
                                 <Autocomplete
                                     className="w-full"
                                     label="Ingredient"
-                                    selectedKey={String(ing.ingredient?.id)}
-                                    onSelectionChange={(keys) => {
-                                        console.log('selectedKey', keys)
-                                            updateIngredient(index, 'ingredientId', Array.from(keys)[0])
-                                    }
-                                    }
+                                    selectedKey={String(ing.ingredientId)  }
+                                    onSelectionChange={(key) => {
+                                        console.log('keys', key);
+                                        if (key) {
+                                            updateIngredient(index, 'ingredientId', key)
+                                        }
+                                    }}
                                 >
                                     {availableIngredients.map((ingr) => (
                                         <SelectItem key={ingr.id}>{ingr.name}</SelectItem>

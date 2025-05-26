@@ -17,6 +17,7 @@ export default function EditMealPage() {
 
     const {mutate: updateMeal, isPending} = useMutation({
         mutationFn: async (data) => {
+            console.log('mutationFn', data);
             await axiosClient.put(`/meals/${id}`, data);
         },
         onSuccess: () => {
@@ -29,6 +30,7 @@ export default function EditMealPage() {
     });
 
     const loading = loadingMeal || loadingIngredients;
+    console.log('meal', meal);
 
     const initialData = meal && {
         name: meal.name,
@@ -36,10 +38,10 @@ export default function EditMealPage() {
         date: meal.createdAt.split('T')[0],
         ingredients: meal.ingredients.map((mi) => ({
             ingredient: mi.ingredient,
+            ingredientId: mi.ingredient.id,
             weight: mi.weight,
         })),
     };
-console.log('meal', meal);
     return (
         <div className="max-w-2xl mx-auto px-0 sm:px-4 py-6 space-y-6">
             <h1 className="text-2xl font-semibold text-center text-[#353535]">Edit Meal</h1>

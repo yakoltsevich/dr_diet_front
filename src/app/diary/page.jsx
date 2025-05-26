@@ -2,13 +2,13 @@
 
 import {useEffect, useState} from 'react';
 import {Card, CardBody} from '@heroui/card';
-import {Button} from '@heroui/button';
+import {Button, ButtonGroup} from '@heroui/button';
 import {Input} from '@heroui/input';
 import {Icon} from '@/components/common/Icon';
 import {faTrashCan, faPen} from '@fortawesome/free-solid-svg-icons';
 import {useRouter} from 'next/navigation';
 import {axiosClient} from '@/lib/axiosClient';
-import {Checkbox} from '@heroui/react';
+import {Checkbox, Chip, Divider} from '@heroui/react';
 
 export default function NutritionDiaryPage() {
     const [meals, setMeals] = useState([]);
@@ -72,11 +72,32 @@ export default function NutritionDiaryPage() {
 
     const totals = getTotal();
 
+    const renderIngredients = (meal) => {
+        return <div className="space-y-1">
+            {meal.ingredients.map(({ingredient, weight}, idx) => {
+                return (
+                    <div key={idx} className="text-sm text-muted-foreground bg-gray-100 rounded-lg px-2">
+                        <div className='font-semibold'>{ingredient.name} {weight} г</div>
+                        <div className='space-x-1'>
+                            <Chip size='sm'
+                                  className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{(ingredient.calories)} ккал</Chip>
+                            <Chip size='sm'
+                                  className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {(ingredient.protein)}</Chip>
+                            <Chip size='sm'
+                                  className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {(ingredient.fat)}</Chip>
+                            <Chip size='sm'
+                                  className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {(ingredient.carbs)}</Chip>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    }
     return (
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
             <h1 className="text-2xl font-semibold text-center text-[#353535]">Nutrition Diary</h1>
 
-            <div className="flex flex justify-center gap-2">
+            <div className="flex justify-center gap-2">
                 <Input
                     type="date"
                     className="w-full sm:w-48"
@@ -108,16 +129,19 @@ export default function NutritionDiaryPage() {
                         {meals.map((meal) => (
                             <Card key={meal.id}>
                                 <CardBody className="p-4 space-y-2">
-                                    <div className="flex justify-between items-start gap-2">
-                                        <h2 className="font-semibold text-lg">{meal.name}</h2>
-                                        <div className="flex gap-1">
+                                    <div className="flex justify-between items-center gap-2">
+                                        <div className=''>
+                                            <h2 className="font-semibold text-lg">{meal.name}</h2>
+                                            <div className="text-sm text-gray-400">{meal.type}</div>
+                                        </div>
+                                        <div className="flex">
                                             <Button
                                                 variant="light"
                                                 isIconOnly
                                                 className="text-gray-700"
                                                 onPress={() => router.push(`/diary/edit/${meal.id}`)}
                                             >
-                                                <Icon icon={faPen} />
+                                                <Icon icon={faPen}/>
                                             </Button>
                                             <Button
                                                 variant="light"
@@ -125,33 +149,28 @@ export default function NutritionDiaryPage() {
                                                 className="text-gray-700"
                                                 onPress={() => handleDelete(meal.id)}
                                             >
-                                                <Icon icon={faTrashCan} />
+                                                <Icon icon={faTrashCan}/>
                                             </Button>
                                         </div>
                                     </div>
-                                    <ul className="space-y-1">
-                                        {meal.ingredients.map(({ingredient, weight}, idx) => {
-                                            const ratio = weight / 100;
-                                            return (
-                                                <li key={idx} className="text-sm text-muted-foreground">
-                                                    {weight} г {ingredient.name} —{' '}
-                                                    {(ingredient.calories * ratio).toFixed(0)} ккал ·{' '}
-                                                    {(ingredient.protein * ratio).toFixed(0)}г Б ·{' '}
-                                                    {(ingredient.fat * ratio).toFixed(0)}г Ж ·{' '}
-                                                    {(ingredient.carbs * ratio).toFixed(0)}г У
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
+                                    {renderIngredients(meal)}
                                 </CardBody>
                             </Card>
                         ))}
                     </div>
 
                     <div className="bg-[#f3f3f2] rounded-xl p-4 text-sm text-center shadow-inner text-[#353535]">
-                        <strong>Total:</strong> {totals.calories.toFixed(0)} ккал ·{' '}
-                        {totals.protein.toFixed(0)}г Б · {totals.fat.toFixed(0)}г Ж ·{' '}
-                        {totals.carbs.toFixed(0)}г У
+                        <div className='space-x-1'>
+                            <strong>Total:</strong>
+                            <Chip size='sm'
+                                  className="text-md  bg-[#d6d6d6] text-[#353535]">{totals.calories.toFixed(0)} ккал</Chip>
+                            <Chip size='sm'
+                                  className="text-md bg-[#d9e0dd] text-[#354e49]">Б {totals.protein.toFixed(0)}</Chip>
+                            <Chip size='sm'
+                                  className="text-md  bg-[#f1e8e0] text-[#6d5a48]">Ж {totals.fat.toFixed(0)}</Chip>
+                            <Chip size='sm'
+                                  className="text-md bg-[#e1eaea] text-[#4e5e5e]">У {totals.carbs.toFixed(0)}</Chip>
+                        </div>
                     </div>
                 </>
             )}
