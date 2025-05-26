@@ -21,21 +21,21 @@ export default function MealForm({
     const [name, setName] = useState(initialData?.name || '');
     const [type, setType] = useState(initialData?.type || 'breakfast');
     const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
-    const [ingredients, setIngredients] = useState(initialData?.ingredients || []);
+    const [mealIngredients, setMealIngredients] = useState(initialData?.ingredients || []);
     const [showModal, setShowModal] = useState(false);
 
     const updateIngredient = (index, field, value) => {
-        const newList = [...ingredients];
+        const newList = [...mealIngredients];
         newList[index][field] = value;
-        setIngredients(newList);
+        setMealIngredients(newList);
     };
 
     const addIngredient = () => {
-        setIngredients([...ingredients, {ingredientId: '', weight: ''}]);
+        setMealIngredients([...mealIngredients, {ingredientId: '', weight: ''}]);
     };
 
     const removeIngredient = (index) => {
-        setIngredients(ingredients.filter((_, i) => i !== index));
+        setMealIngredients(mealIngredients.filter((_, i) => i !== index));
     };
 
     const handleSubmit = () => {
@@ -43,7 +43,7 @@ export default function MealForm({
             name,
             type,
             date,
-            ingredients: ingredients.map((i) => ({
+            ingredients: mealIngredients.map((i) => ({
                 ingredientId: parseInt(i.ingredientId),
                 weight: parseFloat(i.weight),
             })),
@@ -53,7 +53,7 @@ export default function MealForm({
     if (loading) {
         return <p className="text-center text-muted-foreground">Загрузка ингредиентов...</p>;
     }
-    console.log('ingredients', ingredients);
+    console.log('mealIngredients', mealIngredients);
     return (
         <Card>
             <CardBody className="space-y-4">
@@ -84,17 +84,17 @@ export default function MealForm({
                 <div className="space-y-3">
                     <h3 className="font-semibold text-sm">Ingredients</h3>
 
-                    {ingredients.map((ing, index) => {
-                        console.log('ing', ing);
-                        console.log('ing.ingredient?.id?.toString()', ing.ingredient?.id?.toString());
+                    {mealIngredients.map((ing, index) => {
                         return (
                             <div key={index} className="flex items-center gap-2">
                                 <Autocomplete
                                     className="w-full"
                                     label="Ingredient"
-                                    selectedKeys={ing.ingredient?.id}
-                                    onSelectionChange={(keys) =>
-                                        updateIngredient(index, 'ingredientId', Array.from(keys)[0])
+                                    selectedKey={String(ing.ingredient?.id)}
+                                    onSelectionChange={(keys) => {
+                                        console.log('selectedKey', keys)
+                                            updateIngredient(index, 'ingredientId', Array.from(keys)[0])
+                                    }
                                     }
                                 >
                                     {availableIngredients.map((ingr) => (
@@ -136,7 +136,7 @@ export default function MealForm({
                     isOpen={showModal}
                     onClose={() => setShowModal(false)}
                     onCreated={(newIngredient) => {
-                        setIngredients((prev) => [
+                        setMealIngredients((prev) => [
                             ...prev,
                             {ingredientId: newIngredient.id.toString(), weight: ''},
                         ]);
