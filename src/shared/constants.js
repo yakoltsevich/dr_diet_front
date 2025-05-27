@@ -1,3 +1,13 @@
+import {
+    faBook,
+    faEllipsisH, faGear,
+    faHouse, faInfoCircle,
+    faPlusCircle,
+    faTableList,
+    faUser,
+    faUtensils
+} from "@fortawesome/free-solid-svg-icons";
+
 export const MOCKED_MENU = [
     {
         "day": 1,
@@ -1682,19 +1692,89 @@ export const PUBLIC_ROUTES = ['/login', '/register', '/about', '/terms', '/regis
 export const MENU_ROUTES = [{
     route: '/menu',
     title: 'Menu',
+    icon: faUtensils,
 }, {
     route: '/profile',
     title: 'Profile',
+    icon: faUser,
 }, {
     route: '/groceries',
     title: 'Grocery',
+    icon: faPlusCircle,
 }, {
     route: '/diary',
     title: 'Diary',
+    icon: faPlusCircle,
 }, {
     route: '/settings',
     title: 'Settings',
+    icon: faPlusCircle,
 },
+]
+export const MORE_ITEMS = [
+    {
+        href: '/menu',
+        icon: faUtensils,
+        label: 'Menu',
+    },
+    {
+        href: '/profile',
+        icon: faUser,
+        label: 'Profile',
+    },
+    {
+        href: '/diary',
+        icon: faBook,
+        label: 'Food diary',
+    },
+    {
+        href: '/nutrients',
+        icon: faTableList,
+        label: 'Nutrients',
+    },
+    {
+        href: '/settings',
+        icon: faGear,
+        label: 'Settings',
+    },
+    {
+        href: '/terms',
+        icon: faInfoCircle,
+        label: 'Term of Usage',
+    },
+    {
+        href: '/privacy',
+        icon: faInfoCircle,
+        label: 'Privacy Policy',
+    },
+];
+
+export const MOBILE_MENU_ROUTES = [
+    {
+        route: '/',
+        title: 'Home',
+        icon: faHouse,
+    },
+    {
+        route: '/menu',
+        title: 'Menu',
+        icon: faUtensils,
+    },
+    {
+        route: '/profile',
+        title: 'Profile',
+        icon: faUser,
+    },
+    {
+        route: '/diary',
+        title: 'Diary',
+        icon: faBook,
+    },
+    {
+        route: '/more',
+        title: 'More',
+        icon: faEllipsisH,
+    },
 ]
 
 

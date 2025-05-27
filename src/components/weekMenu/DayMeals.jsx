@@ -21,7 +21,7 @@ const SelectDay = ({activeDay, setActiveDay}) => {
         setActiveDay(Array.from(v)[0])
     }
     return <Select
-        className="max-w-full py-2 sm:hidden"
+        className="max-w-full py-2"
         placeholder="Select an day"
         selectedKeys={new Set(activeDay)}
         variant="faded"
@@ -40,7 +40,7 @@ console.log('activeDay',activeDay);
     return (
         <div className="w-full p-4">
             <h2 className="hidden sm:block text-2xl font-bold text-textColor mb-2">Day {day.day}</h2>
-            <ButtonGroup className='flex items-center'>
+            <ButtonGroup className=' sm:hidden flex items-center'>
                 <Button
                     variant="ghost"
                     isIconOnly

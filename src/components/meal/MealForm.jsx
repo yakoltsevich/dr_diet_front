@@ -7,7 +7,7 @@ import {Button} from '@heroui/button';
 import {Card, CardBody} from '@heroui/card';
 import {Icon} from '@/components/common/Icon';
 import {faTrashCan} from '@fortawesome/free-solid-svg-icons';
-import {Autocomplete, AutocompleteItem, NumberInput} from "@heroui/react";
+import {Autocomplete, AutocompleteItem, Chip, NumberInput} from "@heroui/react";
 import {AddIngredientModal} from '@/components/ingredient/AddIngredientModal';
 import {MEAL_TYPES_OPTIONS} from '@/shared/constants';
 import {axiosClient} from "@/lib/axiosClient";
@@ -102,6 +102,7 @@ export default function MealForm({
                     <h3 className="font-semibold text-sm">Ingredients</h3>
 
                     {mealIngredients.map((ing, index) => {
+                        console.log('ingredient', ing);
                         return (
                             <div key={index} className="flex items-center gap-1">
                                 <Autocomplete
@@ -119,6 +120,30 @@ export default function MealForm({
                                         <AutocompleteItem
                                             hideSelectedIcon
                                             key={ingr.id}
+                                            listboxProps={{
+                                                hideSelectedIcon: true,
+                                                itemClasses: {
+                                                    base: [
+                                                        "rounded-medium",
+                                                        "text-default-500",
+                                                        "transition-opacity",
+                                                        "data-[hover=true]:text-foreground",
+                                                        "dark:data-[hover=true]:bg-default-50",
+                                                        "data-[pressed=true]:opacity-70",
+                                                        "data-[hover=true]:bg-default-200",
+                                                        "data-[selectable=true]:focus:bg-default-100",
+                                                        "data-[focus-visible=true]:ring-default-500",
+                                                    ],
+                                                },
+                                            }}
+                                            placeholder="Enter employee name"
+                                            popoverProps={{
+                                                offset: 10,
+                                                classNames: {
+                                                    base: "rounded-large",
+                                                    content: "p-1 border-small border-default-100 bg-background",
+                                                },
+                                            }}
                                             endContent={<Button
                                                 variant="light"
                                                 className="text-gray-700 w-5 min-w-5"
@@ -127,7 +152,22 @@ export default function MealForm({
                                             >
                                                 <Icon icon={faTrashCan}/>
                                             </Button>}
-                                        >{ingr.name}</AutocompleteItem>
+                                        >
+                                            {/*<div className='flex flex-col items-start justify-center'>*/}
+                                            {/*    <div>{ingr.name}</div>*/}
+                                            {/*    <div className='space-x-2'>*/}
+                                            {/*        <Chip size='sm'*/}
+                                            {/*              className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{ingr.calories.toFixed(0)} ккал</Chip>*/}
+                                            {/*        <Chip size='sm'*/}
+                                            {/*              className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {ingr.protein.toFixed(0)}</Chip>*/}
+                                            {/*        <Chip size='sm'*/}
+                                            {/*              className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {ingr.fat.toFixed(0)}</Chip>*/}
+                                            {/*        <Chip size='sm'*/}
+                                            {/*              className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {ingr.carbs.toFixed(0)}</Chip>*/}
+                                            {/*    </div>*/}
+                                            {/*</div>*/}
+                                            {ingr.name}
+                                        </AutocompleteItem>
                                     ))}
                                 </Autocomplete>
 

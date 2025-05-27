@@ -14,10 +14,13 @@ export const ClientLayoutShell = ({children}) => {
 
     return (
         <div>
-            {!hideHeaderAndFooter && <Header/>}
-            <main>{children}</main>
+            <BottomNav/>
+            {!hideHeaderAndFooter && <>
+                <Header/>
+                <BottomNav/>
+            </>}
+            <main className='pb-[70px] '>{children}</main>
             {!hideHeaderAndFooter && <Footer/>}
-            {/*{!hideHeaderAndFooter && <BottomNav/>}*/}
         </div>
     );
 };

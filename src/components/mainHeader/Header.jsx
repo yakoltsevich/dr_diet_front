@@ -13,7 +13,7 @@ export const Header = () => {
             height={80}
             isBordered
             maxWidth="full"
-            className="bg-[#f3f3f2] text-[#353535] justify-end"
+            className="hidden sm:block bg-[#f3f3f2] text-[#353535] justify-end"
             classNames={{
                 wrapper: 'pl-0 sm:px-6',
             }}

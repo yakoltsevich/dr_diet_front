@@ -1,6 +1,6 @@
 export const Footer = () => {
     return (
-        <footer className="bg-textColor text-white py-10 text-center text-sm w-full">
+        <footer className=" hidden sm:block bg-textColor text-white py-10 text-center text-sm w-full">
             <p>© {new Date().getFullYear()} Dr Diet App. All rights reserved.</p>
             <div className="mt-2 space-x-4">
                 <a href="/" className="hover:underline">Home</a>
