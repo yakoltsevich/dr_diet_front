@@ -36,6 +36,12 @@ const NUTRIENT_CONF = [
     },
 ]
 
+export const createdBy = {
+    user: 'user',
+    admin: 'admin',
+    ai: 'ai',
+}
+
 export function AddIngredientModal({isOpen, onClose, onCreated}) {
     const [form, setForm] = useState({
         name: '',
@@ -60,6 +66,7 @@ export function AddIngredientModal({isOpen, onClose, onCreated}) {
                 protein: parseFloat(form.protein),
                 fat: parseFloat(form.fat),
                 carbs: parseFloat(form.carbs),
+                createdBy: createdBy.user
             });
 
             const ingredient = res.data;

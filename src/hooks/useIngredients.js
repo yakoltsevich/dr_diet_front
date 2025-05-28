@@ -1,18 +1,32 @@
-import {useQuery} from '@tanstack/react-query';
-import {axiosClient} from '@/lib/axiosClient';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { axiosClient } from '@/lib/axiosClient';
 
-export function useIngredients() {
-    const {data, error, isLoading, refetch} = useQuery({
-        queryKey: ['ingredients'],
-        queryFn: async () => {
-            const res = await axiosClient.get('/ingredients');
+const LIMIT = 999;
+
+export function useIngredients(searchQuery = '') {
+    const query = useInfiniteQuery({
+        queryKey: ['ingredients', searchQuery], // Ключ зависит от поискового текста
+        queryFn: async ({ pageParam = 0 }) => {
+            const res = await axiosClient.get('/ingredients', {
+                params: {
+                    offset: pageParam,
+                    limit: LIMIT,
+                    name: searchQuery, // 🔍 передаём inputValue
+                },
+            });
             return res.data;
         },
+        getNextPageParam: (lastPage) =>
+            lastPage.hasMore ? lastPage.offset + lastPage.limit : undefined,
     });
+
     return {
-        ingredients: data || [],
-        loading: isLoading,
-        error,
-        refetch,
+        ingredients: query.data?.pages.flatMap((page) => page.data) || [],
+        loading: query.isLoading,
+        error: query.error,
+        refetch: query.refetch,
+        fetchNextPage: query.fetchNextPage,
+        hasNextPage: query.hasNextPage,
+        isFetchingNextPage: query.isFetchingNextPage,
     };
 }

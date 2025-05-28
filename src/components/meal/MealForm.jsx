@@ -11,15 +11,15 @@ import {Autocomplete, AutocompleteItem, Chip, NumberInput} from "@heroui/react";
 import {AddIngredientModal} from '@/components/ingredient/AddIngredientModal';
 import {MEAL_TYPES_OPTIONS} from '@/shared/constants';
 import {axiosClient} from "@/lib/axiosClient";
+import {AsyncAutocomplete} from "@/components/common/AsyncAutocomplete";
 
 export default function MealForm({
                                      initialData,
-                                     availableIngredients,
-                                     refetchAvailableIngredients,
+                                     ingredientsQuery,
                                      onSubmit,
                                      isSubmitting = false,
-                                     loading = false
                                  }) {
+    const {loading, refetch: refetchAvailableIngredients, ingredients: availableIngredients} = ingredientsQuery
     const [name, setName] = useState(initialData?.name || '');
     const [type, setType] = useState(initialData?.type || 'breakfast');
     const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
@@ -100,6 +100,46 @@ export default function MealForm({
 
                 <div className="space-y-3">
                     <h3 className="font-semibold text-sm">Ingredients</h3>
+                    {/*{mealIngredients.map((ing, index) => {*/}
+                    {/*    console.log('ingredient', ing);*/}
+                    {/*    return (*/}
+                    {/*        <div key={index} className="flex items-center gap-1">*/}
+                    {/*            <AsyncAutocomplete*/}
+                    {/*                className="w-full"*/}
+                    {/*                label="Ingredient"*/}
+                    {/*                selectedKey={'7'}*/}
+                    {/*                onSelectionChange={(key) => {*/}
+                    {/*                    console.log('keys', key);*/}
+                    {/*                    if (key) {*/}
+                    {/*                        updateIngredient(index, 'ingredientId', key)*/}
+                    {/*                    }*/}
+                    {/*                }}*/}
+                    {/*                itemProps={{*/}
+                    {/*                    handleRemoveIngredient: handleRemoveIngredient,*/}
+                    {/*                    placeholder: "Enter employee name",*/}
+                    {/*                }}*/}
+                    {/*            />*/}
+
+                    {/*            <NumberInput*/}
+                    {/*                className="w-32 min-w-16"*/}
+                    {/*                label="Grams"*/}
+                    {/*                minValue={0}*/}
+                    {/*                value={ing.weight}*/}
+                    {/*                onValueChange={(value) => updateIngredient(index, 'weight', value)}*/}
+                    {/*            />*/}
+
+                    {/*            <Button*/}
+                    {/*                variant="light"*/}
+                    {/*                className="text-gray-700 w-5 min-w-5"*/}
+                    {/*                isIconOnly*/}
+                    {/*                onPress={() => removeMealIngredient(index)}*/}
+                    {/*            >*/}
+                    {/*                <Icon icon={faTrashCan}/>*/}
+                    {/*            </Button>*/}
+                    {/*        </div>*/}
+                    {/*    )*/}
+                    {/*})}*/}
+
 
                     {mealIngredients.map((ing, index) => {
                         console.log('ingredient', ing);
@@ -108,6 +148,29 @@ export default function MealForm({
                                 <Autocomplete
                                     className="w-full"
                                     label="Ingredient"
+                                    listboxProps={{
+                                        hideSelectedIcon: true,
+                                        itemClasses: {
+                                            base: [
+                                                "rounded-medium",
+                                                "text-default-500",
+                                                "transition-opacity",
+                                                "data-[hover=true]:text-foreground",
+                                                "dark:data-[hover=true]:bg-default-50",
+                                                "data-[pressed=true]:opacity-70",
+                                                "data-[hover=true]:bg-default-200",
+                                                "data-[selectable=true]:focus:bg-default-100",
+                                                "data-[focus-visible=true]:ring-default-500",
+                                            ],
+                                        },
+                                    }}
+                                    popoverProps={{
+                                        offset: 10,
+                                        classNames: {
+                                            base: "rounded-large",
+                                            content: "p-1 border-small border-default-100 bg-background",
+                                        },
+                                    }}
                                     selectedKey={String(ing.ingredientId)}
                                     onSelectionChange={(key) => {
                                         console.log('keys', key);
@@ -120,30 +183,7 @@ export default function MealForm({
                                         <AutocompleteItem
                                             hideSelectedIcon
                                             key={ingr.id}
-                                            listboxProps={{
-                                                hideSelectedIcon: true,
-                                                itemClasses: {
-                                                    base: [
-                                                        "rounded-medium",
-                                                        "text-default-500",
-                                                        "transition-opacity",
-                                                        "data-[hover=true]:text-foreground",
-                                                        "dark:data-[hover=true]:bg-default-50",
-                                                        "data-[pressed=true]:opacity-70",
-                                                        "data-[hover=true]:bg-default-200",
-                                                        "data-[selectable=true]:focus:bg-default-100",
-                                                        "data-[focus-visible=true]:ring-default-500",
-                                                    ],
-                                                },
-                                            }}
                                             placeholder="Enter employee name"
-                                            popoverProps={{
-                                                offset: 10,
-                                                classNames: {
-                                                    base: "rounded-large",
-                                                    content: "p-1 border-small border-default-100 bg-background",
-                                                },
-                                            }}
                                             endContent={<Button
                                                 variant="light"
                                                 className="text-gray-700 w-5 min-w-5"
@@ -171,22 +211,22 @@ export default function MealForm({
                                     ))}
                                 </Autocomplete>
 
-                                   <NumberInput
-                                       className="w-32 min-w-16"
-                                       label="Grams"
-                                       minValue={0}
-                                       value={ing.weight}
-                                       onValueChange={(value) => updateIngredient(index, 'weight', value)}
-                                   />
+                                <NumberInput
+                                    className="w-32 min-w-16"
+                                    label="Grams"
+                                    minValue={0}
+                                    value={ing.weight}
+                                    onValueChange={(value) => updateIngredient(index, 'weight', value)}
+                                />
 
-                                   <Button
-                                       variant="light"
-                                       className="text-gray-700 w-5 min-w-5"
-                                       isIconOnly
-                                       onPress={() => removeMealIngredient(index)}
-                                   >
-                                       <Icon icon={faTrashCan}/>
-                                   </Button>
+                                <Button
+                                    variant="light"
+                                    className="text-gray-700 w-5 min-w-5"
+                                    isIconOnly
+                                    onPress={() => removeMealIngredient(index)}
+                                >
+                                    <Icon icon={faTrashCan}/>
+                                </Button>
                             </div>
                         )
                     })}
@@ -222,5 +262,6 @@ export default function MealForm({
                 </Button>
             </CardBody>
         </Card>
-    );
+    )
+        ;
 }
