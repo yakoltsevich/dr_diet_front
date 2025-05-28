@@ -28,7 +28,7 @@ export default function Menu() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto sm:p-4 min-h-[calc(100vh-217px)]">
+        <div className="max-w-7xl mx-auto sm:p-4 ">
             {
                 menu && menu.length !== 0 && (
                     <WeekMenu menu={menu} />

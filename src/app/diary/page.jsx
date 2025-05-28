@@ -5,7 +5,7 @@ import {Card, CardBody} from '@heroui/card';
 import {Button, ButtonGroup} from '@heroui/button';
 import {Input} from '@heroui/input';
 import {Icon} from '@/components/common/Icon';
-import {faTrashCan, faPen, faCopy} from '@fortawesome/free-solid-svg-icons';
+import {faTrashCan, faPen, faCopy, faClone} from '@fortawesome/free-solid-svg-icons';
 import {useRouter} from 'next/navigation';
 import {axiosClient} from '@/lib/axiosClient';
 import {Checkbox, Chip, Divider} from '@heroui/react';
@@ -150,7 +150,7 @@ export default function NutritionDiaryPage() {
                                                 className="text-gray-700"
                                                 onPress={() => router.push(`/diary/add?duplicate=${meal.id}`)}
                                             >
-                                                <Icon icon={faCopy}/>
+                                                <Icon icon={faClone}/>
                                             </Button>
                                             <Button
                                                 variant="light"

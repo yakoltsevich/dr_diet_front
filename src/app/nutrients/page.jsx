@@ -25,7 +25,7 @@ export default function PrivacyPage() {
     if (loading) return <div>Загрузка...</div>;
 
     return (
-        <div className="p-6 max-w-3xl mx-auto text-[#353535] bg-lightColor h-screen">
+        <div className="p-6 max-w-3xl mx-auto text-[#353535] bg-lightColor">
             <h1 className="text-2xl font-semibold mb-4">Coming soon...</h1>
         </div>
     );

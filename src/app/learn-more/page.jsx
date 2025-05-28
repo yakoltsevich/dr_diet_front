@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 export default function LearnMorePage() {
     const { isAuthenticated, user } = useSelector(state => state.auth);
     return (
-        <div className="min-h-screen bg-[#f3f3f2] text-[#353535] font-[Manrope] px-6 py-10">
+        <div className="min-h-screen bg-[#f3f3f2] text-[#353535] font-[Manrope] p-6">
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl font-bold mb-6">How does Dr. Diet work?</h1>
                 <p className="mb-4 text-lg">

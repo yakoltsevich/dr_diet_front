@@ -1689,27 +1689,37 @@ export const MOCKED_MENU = [
 
 export const PUBLIC_ROUTES = ['/login', '/register', '/about', '/terms', '/register', '/learn-more', '/'];
 
-export const MENU_ROUTES = [{
-    route: '/menu',
-    title: 'Menu',
-    icon: faUtensils,
-}, {
-    route: '/profile',
-    title: 'Profile',
-    icon: faUser,
-}, {
-    route: '/groceries',
-    title: 'Grocery',
-    icon: faPlusCircle,
-}, {
-    route: '/diary',
-    title: 'Diary',
-    icon: faPlusCircle,
-}, {
-    route: '/settings',
-    title: 'Settings',
-    icon: faPlusCircle,
-},
+export const MENU_ROUTES = [
+    {
+        route: '/menu',
+        title: 'Menu',
+        icon: faUtensils,
+    },
+    {
+        route: '/profile',
+        title: 'Profile',
+        icon: faUser,
+    },
+    {
+        route: '/groceries',
+        title: 'Grocery',
+        icon: faPlusCircle,
+    },
+    {
+        route: '/diary',
+        title: 'Diary',
+        icon: faPlusCircle,
+    },
+    {
+        route: '/nutrients',
+        title: 'Nutrients',
+        icon: faPlusCircle,
+    },
+    {
+        route: '/settings',
+        title: 'Settings',
+        icon: faPlusCircle,
+    },
 ]
 export const MORE_ITEMS = [
     {

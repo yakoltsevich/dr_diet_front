@@ -5,6 +5,7 @@ import {usePathname} from 'next/navigation';
 import {Header} from '@/components/mainHeader/Header';
 import {Footer} from '@/components/Footer';
 import {BottomNav} from "@/components/BottomNav";
+import clsx from "clsx";
 
 export const ClientLayoutShell = ({children}) => {
     const pathname = usePathname();
@@ -14,12 +15,12 @@ export const ClientLayoutShell = ({children}) => {
 
     return (
         <div>
-            <BottomNav/>
             {!hideHeaderAndFooter && <>
                 <Header/>
                 <BottomNav/>
             </>}
-            <main className='pb-[70px] '>{children}</main>
+            <main
+                className={clsx(!hideHeaderAndFooter && 'mb-[70px] min-h-[calc(100vh-70px)] sm:mb-0 sm:min-h-[calc(100vh-217px)]')}>{children}</main>
             {!hideHeaderAndFooter && <Footer/>}
         </div>
     );
