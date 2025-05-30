@@ -5,7 +5,7 @@ import {Checkbox} from '@heroui/react';
 
 export const DateInputs = ({dateFrom, dateTo, setDateFrom, setDateTo, rangeEnabled, setRangeEnabled}) => {
     return (
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-2 w-full">
             <Input
                 type="date"
                 className="w-full sm:w-48"
