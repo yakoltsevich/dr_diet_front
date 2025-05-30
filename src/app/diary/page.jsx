@@ -92,7 +92,7 @@ export default function NutritionDiaryPage() {
             <h1 className="text-2xl font-semibold text-center text-[#353535]">
                 Nutrition Diary
             </h1>
-            <div className="flex items-center justify-center sm:justify-between">
+            <div className="flex items-center justify-center sm:justify-between w-full">
                 <Button
                     onPress={() => {
                         const newDate = shiftDate(dateFrom, -1);
