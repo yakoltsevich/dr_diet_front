@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useSwipeable} from 'react-swipeable';
 import {AnimatePresence, motion} from 'framer-motion';
 import {Button} from '@heroui/button';
@@ -9,9 +9,6 @@ import {axiosClient} from '@/lib/axiosClient';
 import {MealCard} from "@/components/diary/MealCard";
 import {DayTotal} from "@/components/diary/DayTotal";
 import {DateInputs} from "@/components/diary/DateInputs";
-import {Spinner} from "@heroui/spinner";
-import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import {Icon} from "@/components/common/Icon";
 
 const shiftDate = (dateStr, days) => {
     const date = new Date(dateStr);
@@ -26,8 +23,16 @@ export default function NutritionDiaryPage() {
     const [dateFrom, setDateFrom] = useState(() => new Date().toISOString().split('T')[0]);
     const [dateTo, setDateTo] = useState(() => new Date().toISOString().split('T')[0]);
     const [swipeDirection, setSwipeDirection] = useState(0); // -1 = вправо, 1 = влево
+    const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
+    const isFirstRender = useRef(true)
     const router = useRouter();
+
+    useEffect(() => {
+        if (!loading && meals.length > 0 && isFirstRender.current) {
+            isFirstRender.current = false;
+        }
+    }, [loading, meals]);
 
     const loadMeals = async () => {
         setLoading(true);
@@ -43,6 +48,7 @@ export default function NutritionDiaryPage() {
             console.error('Ошибка при загрузке приёмов пищи:', err);
         } finally {
             setLoading(false);
+            if (!hasLoadedOnce) setHasLoadedOnce(true);
         }
     };
 
@@ -52,34 +58,42 @@ export default function NutritionDiaryPage() {
         }
     }, [dateFrom, dateTo]);
 
+    const onSwiped = (value) => {
+        const newDate = shiftDate(dateFrom, value);
+        setSwipeDirection(value)
+        setDateFrom(newDate);
+        if (!rangeEnabled) setDateTo(newDate);
+    }
+
+    const onSwipedLeft = () => {
+        onSwiped(1)
+    }
+
+    const onSwipedRight = () => {
+        onSwiped(-1)
+    }
+
     const swipeHandlers = useSwipeable({
-        onSwipedLeft: () => {
-            const newDate = shiftDate(dateFrom, 1);
-            setSwipeDirection(1);
-            setDateFrom(newDate);
-            if (!rangeEnabled) setDateTo(newDate);
-        },
-        onSwipedRight: () => {
-            const newDate = shiftDate(dateFrom, -1);
-            setSwipeDirection(-1);
-            setDateFrom(newDate);
-            if (!rangeEnabled) setDateTo(newDate);
-        },
+        onSwipedLeft,
+        onSwipedRight,
         trackTouch: true,
         trackMouse: true,
     });
 
     const motionVariants = {
-        enter: (direction) => ({
-            x: direction > 0 ? 300 : -300,
+        enter: ({direction, isInitial}) => ({
+            x: isInitial ? 0 : direction > 0 ? 300 : -300,
+            y: isInitial ? 50 : 0,
             opacity: 0,
         }),
         center: {
             x: 0,
+            y: 0,
             opacity: 1,
         },
-        exit: (direction) => ({
+        exit: ({direction}) => ({
             x: direction > 0 ? -300 : 300,
+            y: 0,
             opacity: 0,
         }),
     };
@@ -92,54 +106,23 @@ export default function NutritionDiaryPage() {
             <h1 className="text-2xl font-semibold text-center text-[#353535]">
                 Nutrition Diary
             </h1>
-            <div className="flex items-center justify-center sm:justify-between w-full">
-                <Button
-                    onPress={() => {
-                        const newDate = shiftDate(dateFrom, -1);
-                        setSwipeDirection(-1);
-                        setDateFrom(newDate);
-                        if (!rangeEnabled) setDateTo(newDate);
-                    }}
-                    className="hidden sm:flex bg-[#e4d1c1]/50 items-center justify-center p-2 rounded-full hover:bg-[#e4d1c1] transition"
-                    aria-label="Previous day"
-                    isIconOnly
-                >
-                    <Icon size={'xl'} className="text-[#5e7a76] font-bold" icon={faChevronLeft}/>
-                </Button>
 
-                <DateInputs
-                    dateFrom={dateFrom}
-                    dateTo={dateTo}
-                    setDateFrom={setDateFrom}
-                    setDateTo={setDateTo}
-                    rangeEnabled={rangeEnabled}
-                    setRangeEnabled={setRangeEnabled}
-                />
+            <DateInputs
+                dateFrom={dateFrom}
+                dateTo={dateTo}
+                setDateFrom={setDateFrom}
+                setDateTo={setDateTo}
+                rangeEnabled={rangeEnabled}
+                setRangeEnabled={setRangeEnabled}
+                increaseDay={onSwipedLeft}
+                decreaseDay={onSwipedRight}
+            />
 
-                <Button
-                    onPress={() => {
-                        const newDate = shiftDate(dateFrom, 1);
-                        setSwipeDirection(1);
-                        setDateFrom(newDate);
-                        if (!rangeEnabled) setDateTo(newDate);
-                    }}
-                    isIconOnly
-                    className="hidden sm:flex bg-[#e4d1c1]/50 items-center justify-center p-2 rounded-full hover:bg-[#e4d1c1] transition"
-                    aria-label="Next day"
-                >
-                    <Icon size={'xl'} className="text-[#5e7a76]" icon={faChevronRight}/>
-                </Button>
-            </div>
-            <AnimatePresence custom={swipeDirection} mode="wait">
-
-                {loading ? (
-                    <div className='w-full flex items-center justify-center min-h-32'>
-                        <Spinner color="default" size="lg"/>
-                    </div>
-                ) : (
+            <AnimatePresence custom={{direction: swipeDirection, isInitial: isFirstRender.current}} mode="wait">
+                {!loading && (
                     <motion.div
                         key={dateFrom + dateTo}
-                        custom={swipeDirection}
+                        custom={{direction: swipeDirection, isInitial: isFirstRender.current}}
                         variants={motionVariants}
                         initial="enter"
                         animate="center"
