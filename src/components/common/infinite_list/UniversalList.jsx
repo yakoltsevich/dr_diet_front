@@ -64,7 +64,7 @@ export const UniversalList = () => {
     const itemContentHandler = (index, item) => {
         return (
             <ItemCheckboxWrapper checkBoxEnabled={false} checkboxValue={item.id}>
-                <div className="flex w-full ">
+                <div className="flex w-full">
                     <div className="flex flex-col items-start justify-center w-full">
                         <div className="truncate">{item.name}</div>
                         <div className='flex items-center justify-between w-full'>
@@ -105,7 +105,7 @@ export const UniversalList = () => {
 
 
     return (
-        <div className="space-y-4 relative flex h-full flex-1 flex-col gap-4">
+        <div className="space-y-4 relative flex h-[calc(100%-40px)] flex-1 flex-col gap-4">
             <Card
                 shadow="none"
                 classNames={{
@@ -125,18 +125,20 @@ export const UniversalList = () => {
                             autoComplete='off'
                             isClearable
                         />
-                        <Button isIconOnly
-                                className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
-                                onPress={() => setShowModal(true)}
-                        >
-                            <Icon icon={faPlus}/>
-                        </Button>
+                        <div className='flex gap-2'>
+                            <Button isIconOnly
+                                    className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                                    onPress={() => setShowModal(true)}
+                            >
+                                <Icon icon={faPlus}/>
+                            </Button>
 
-                        <Button isIconOnly
-                                className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
-                        >
-                            <Icon icon={faBarcode}/>
-                        </Button>
+                            <Button isIconOnly
+                                    className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                            >
+                                <Icon icon={faBarcode}/>
+                            </Button>
+                        </div>
 
                     </div>
                 </CardHeader>
@@ -149,19 +151,19 @@ export const UniversalList = () => {
                             wrapper: "h-full gap-0 w-full",
                         }}
                     >
-                            <Virtuoso
-                                ref={virtuosoRef}
-                                data={ingredients}
-                                style={{
-                                    flex: 1,
-                                    position: "relative",
-                                }}
-                                components={{
-                                    Footer: Footer,
-                                }}
-                                itemContent={itemContentHandler}
-                                endReached={hasMore ? loadMore : undefined}
-                            />
+                        <Virtuoso
+                            ref={virtuosoRef}
+                            data={ingredients}
+                            style={{
+                                flex: 1,
+                                position: "relative",
+                            }}
+                            components={{
+                                Footer: Footer,
+                            }}
+                            itemContent={itemContentHandler}
+                            endReached={hasMore ? loadMore : undefined}
+                        />
                         {/*{!virtuosoOnTop && listConfig?.scrollToTop && (*/}
                         {/*    <Button*/}
                         {/*        className="absolute bottom-5 right-5 z-10 opacity-[.3] hover:opacity-75 active:opacity-75 rounded-full"*/}

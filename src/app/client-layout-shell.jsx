@@ -20,7 +20,7 @@ export const ClientLayoutShell = ({children}) => {
                 <BottomNav/>
             </>}
             <main
-                className={clsx(!hideHeaderAndFooter && 'mb-[70px] min-h-[calc(100vh-70px)] h-[calc(100vh-70px)] sm:mb-0 sm:min-h-[calc(100vh-217px)] sm:h-[calc(100vh-217px)]')}>{children}</main>
+                className={clsx(!hideHeaderAndFooter && 'mb-[70px] min-h-[calc(100vh-70px)] sm:mb-0 sm:min-h-[calc(100vh-217px)]')}>{children}</main>
             {!hideHeaderAndFooter && <Footer/>}
         </div>
     );
