@@ -57,6 +57,7 @@ export const RemoteReactSelect = ({
             additional={{
                 page: startPage,
             }}
+            menuPlacement={'auto'}
             defaultOptions
             getOptionLabel={optionLabel}
             {...restProps}

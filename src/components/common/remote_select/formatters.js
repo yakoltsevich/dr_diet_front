@@ -17,8 +17,8 @@ export const contactsFormatter = (items) => {
 export const ingredientFormatter = (items) => {
     return items.map(item => ({
         ...item,
-        value: item.pubId,
-        id_slt: item.pubId,
+        value: item.id,
+        id_slt: item.id,
         title_slt: item.name,
     }))
 }

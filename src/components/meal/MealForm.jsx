@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Input} from '@heroui/input';
 import {Select, SelectItem} from '@heroui/select';
 import {Button} from '@heroui/button';
@@ -184,14 +184,7 @@ export default function MealForm({
                                             hideSelectedIcon
                                             key={ingr.id}
                                             placeholder="Enter employee name"
-                                            endContent={<Button
-                                                variant="light"
-                                                className="text-gray-700 w-5 min-w-5"
-                                                isIconOnly
-                                                onPress={() => handleRemoveIngredient(ingr.id)}
-                                            >
-                                                <Icon icon={faTrashCan}/>
-                                            </Button>}
+                                            endContent={<Chip className={'h-4 '} size="sm">{ingr.createdBy}</Chip>}
                                         >
                                             {/*<div className='flex flex-col items-start justify-center'>*/}
                                             {/*    <div>{ingr.name}</div>*/}

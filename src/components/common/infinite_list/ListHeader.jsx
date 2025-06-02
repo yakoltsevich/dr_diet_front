@@ -1,68 +1,46 @@
-import {Badge, CardHeader, Checkbox,} from "@heroui/react";
-import {ListHeaderControls} from "@/components/common/infinite_list/ListHeaderControls";
+import {CardHeader,} from "@heroui/react";
+import {Input} from "@heroui/input";
+import {Button} from "@heroui/button";
+import {Icon} from "@/components/common/Icon";
+import {faBarcode, faPlus} from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 
 export const ListHeader = ({
-                               mainKey,
-                               checkboxList,
-                               onChangeCheckboxList,
-                               listItems,
-                               listHeaderControlsProps,
-                               loading,
-                               refreshData,
-                               checkBoxEnabled,
+                               search,
+                               setSearch,
                            }) => {
 
 
-    const isSelectAll =
-        checkboxList.length === listItems.length &&
-        checkboxList.length && listItems.length;
-
-    const isIndeterminate = !isSelectAll && checkboxList.length;
-
-    const selectAllItems = (isSelected) => {
-        const selectedIds =
-            isSelected && !isIndeterminate
-                ? listItems.map((item) => item[mainKey])
-                : [];
-
-        onChangeCheckboxList(selectedIds);
-
-        if (!isSelected || isIndeterminate) return;
-        //
-        // addToast({
-        //     title: "info",
-        //     description: `Selected ${selectedIds.length} booklets`,
-        // });
-    };
-
     return (
         <CardHeader>
-            <div className='flex items-center min-h-6 w-full justify-between'>
-                <div className='flex items-center gap-2'>
-                    {checkBoxEnabled && (
-                        <Badge color="danger"
-                               size='sm'
-                               classNames={{
-                                   badge: 'translate-x-[unset] right-[unset] left-[55%]',
-                               }}
-                               isInvisible={!checkboxList.length}
-                               content={checkboxList.length}
-                               shape="rectangle">
-                            <Checkbox
-                                isSelected={isSelectAll}
-                                isIndeterminate={isIndeterminate}
-                                onValueChange={selectAllItems}
-                            />
-                        </Badge>
-                    )}
-                </div>
-
-                <ListHeaderControls
-                    loading={loading}
-                    refreshData={refreshData}
-                    {...listHeaderControlsProps}
+            <div className='flex items-center min-h-6 w-full justify-between gap-2'>
+                <Input
+                    placeholder="Поиск по названию"
+                    value={search}
+                    onValueChange={setSearch}
+                    className="w-full sm:w-64"
+                    autoComplete='off'
+                    isClearable
                 />
+                <Button isIconOnly
+                        className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                    // onPress={refreshData}
+                >
+                    <Icon
+                        icon={faPlus}
+                    />
+                </Button>
+
+                <Button isIconOnly
+                        className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                    // onPress={refreshData}
+                >
+                    <Icon
+                        icon={faBarcode}
+                    />
+                </Button>
+
             </div>
         </CardHeader>
     );

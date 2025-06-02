@@ -20,20 +20,6 @@ export const RemoteReactSelectWrapper = ({
     const [isLoaded, setIsLoaded] = useState(true);
     const {route, embed, mainKey, formatterFn} = remoteSelectConfig[type];
     const limit = 10;
-    //
-    // useEffect(() => {
-    //     if (predefinedValue) {
-    //         setIsLoaded(false)
-    //         // getSourceData({route, embed, [mainKey]: predefinedValue})
-    //         //     .then(({data}) => {
-    //         //         if (!data.ok) return;
-    //         //         const items = formatterFn(data.items);
-    //         //         setSelectValue(items)
-    //         //     })
-    //         //     .finally(() => setIsLoaded(true))
-    //
-    //     }
-    // }, [predefinedValue])
 
     // const fetchIngredients = async () => {
     //     setLoading(true);
@@ -82,6 +68,7 @@ export const RemoteReactSelectWrapper = ({
             });
     };
     const onChangeSelection = (value) => {
+        console.log('selectValue', value);
         setSelectValue(value)
         if (isMulti) {
             const idsArr = value.map(({[mainKey]: id}) => id);
@@ -104,6 +91,8 @@ export const RemoteReactSelectWrapper = ({
                 value={selectValue}
                 onChange={onChangeSelection}
                 loadOptions={loadOptions}
+                defaultMenuIsOpen={true}
+                menuIsOpen={true}
                 {...restProps}
             />
             {/*{*/}

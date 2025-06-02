@@ -1,6 +1,4 @@
-import {
-    contactsFormatter, ingredientFormatter,
-} from "./formatters.js";
+import {contactsFormatter, ingredientFormatter,} from "./formatters.js";
 import {classNames} from "@/shared/classNames";
 
 export const remoteSelectConfig = {
@@ -33,8 +31,8 @@ export const reactSelectClassNames = ({menuIsOpen, customClassNames}) => ({
     input: (state) => classNames(' inputAnchor !m-0 pl-[8px]', customClassNames.input),
     loadingIndicator: (state) => classNames(' loadingIndicatorAnchor', customClassNames.loadingIndicator),
     loadingMessage: (state) => classNames(' loadingMessageAnchor', customClassNames.loadingMessage),
-    menu: (state) => classNames('menuAnchor p-2 !rounded-xl', customClassNames.menu),
-    menuList: (state) => classNames('menuListAnchor no-scrollbar space-y-2', customClassNames.menuList),
+    menu: (state) => classNames('menuAnchor p-2 !rounded-xl !z-[99] !max-h-[250px] ', customClassNames.menu),
+    menuList: (state) => classNames('menuListAnchor no-scrollbar  !max-h-[230px] ', customClassNames.menuList),
     menuPortal: (state) => classNames(' menuPortalAnchor', customClassNames.menuPortal),
     multiValue: (state) => classNames('multiValueAnchor !rounded-lg h-[28px] flex items-center', customClassNames.multiValue),
     multiValueLabel: (state) => classNames(' multiValueLabelAnchor', customClassNames.multiValueLabel),
@@ -46,12 +44,19 @@ export const reactSelectClassNames = ({menuIsOpen, customClassNames}) => ({
     ),
     noOptionsMessage: (state) => classNames(' noOptionsMessageAnchor', customClassNames.noOptionsMessage),
     option: (state) => classNames('optionAnchor !rounded-lg !text-[#000000]'
-        , ' !py-[6px] !px-[6px] !m-0 !flex ',
+        , ' !py-[6px] !px-[6px] !m-0 !mb-2 !flex ',
         customClassNames.option),
     placeholder: (state) => classNames(' placeholderAnchor pl-[7px]', customClassNames.placeholder),
     singleValue: (state) => classNames(' singleValueAnchor  pl-2', customClassNames.singleValue),
     valueContainer: (state) => classNames(' valueContainerAnchor flex flex-wrap !p-[2px] gap-[2px]', customClassNames.valueContainer),
 });
+const myColors = {
+    lightColor: "#f3f3f2",   // светлый фон
+    primaryColor: "#5e7a76", // кнопки (серо-зелёный)
+    textColor: "#353535",    // основной текст
+    beigeColor: "#e4d1c1",   // бежевый оттенок
+    softColor: "#b6c8c4",    // фон/вспомогательные элементы
+}
 
 export const reactSelectTheme = (theme) => {
     return ({
@@ -76,15 +81,15 @@ export const reactSelectTheme = (theme) => {
             "neutral80": "hsl(0, 0%, 20%)",
             "neutral90": "hsl(0, 0%, 10%)",
 
-            primary25: '#e4e4e7',
-            primary50: '#d4d4d8',
-            primary: '#d4d4d8',
+            primary25: myColors.primaryColor,
+            primary50: myColors.softColor,
+            primary: myColors.softColor,
             dangerLight: '#404041',
             danger: '#afafb2',
         },
         spacing: {
             baseUnit: 0,
-            controlHeight: 32,
+            controlHeight: 56,
             menuGutter: 5
         }
     })

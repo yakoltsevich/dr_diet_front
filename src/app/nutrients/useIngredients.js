@@ -13,7 +13,6 @@ export function useIngredients() {
 
     const fetchIngredients = async () => {
         setLoading(true);
-
         try {
             const response = await axiosClient.get('/ingredients', {
                 params: {
@@ -26,6 +25,7 @@ export function useIngredients() {
             const {data, total} = response.data;
             setIngredients(data);
             setTotal(total);
+            return response.data;
         } catch (error) {
             console.error('Ошибка при загрузке ингредиентов:', error);
         } finally {
@@ -54,6 +54,7 @@ export function useIngredients() {
 
     return {
         ingredients,
+        fetchIngredients,
         total,
         limit,
         offset,

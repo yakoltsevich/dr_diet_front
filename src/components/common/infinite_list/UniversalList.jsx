@@ -1,209 +1,108 @@
-import {Button, Card, CardBody, CheckboxGroup, Chip, Spinner} from "@heroui/react";
-import {GroupedVirtuoso, Virtuoso} from "react-virtuoso";
-import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
-import {ItemCheckboxWrapper} from "@/components/common/infinite_list/ItemCheckboxWrapper";
-import {ListHeader} from "@/components/common/infinite_list/ListHeader";
+import {Button, CardHeader, CheckboxGroup, Chip, Spinner} from "@heroui/react";
+import {Virtuoso} from "react-virtuoso";
+import React, {useEffect, useRef, useState} from "react";
+import {faBarcode, faPlus, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {Icon} from "@/components/common/Icon";
+import {ItemCheckboxWrapper} from "@/components/common/infinite_list/ItemCheckboxWrapper";
+import {axiosClient} from "@/lib/axiosClient";
+import {Input} from "@heroui/input";
+import {AddIngredientModal} from "@/components/ingredient/AddIngredientModal";
+import {Card, CardBody} from "@heroui/card";
 
 const START_PAGE = 0;
-const REFRESH_TIMEOUT = 3000;
-
-export const UniversalList = forwardRef(({listConfig}, ref) => {
-    const {checkBoxEnabled, groupBy, FEProps, itemContent, refreshInterval} = listConfig || {};
-
-    const [checkboxList, setCheckboxList] = useState([]);
+export const UniversalList = () => {
     const [currentPage, setCurrentPage] = useState(START_PAGE);
     const [hasMore, setHasMore] = useState(false);
-    const [filters, setFilters] = useState({});
-    const [loading, setLoading] = useState(false);
-    const [virtuosoOnTop, setVirtuosoOnTop] = useState(false);
-    const [groupKeys, setGroupKeys] = useState([]);
-    const [groupCounts, setGroupCounts] = useState([]);
-    const [showFilterEngine, setShowFilterEngine] = useState(FEProps?.defaultOpen);
-    const [filterInUse, setFilterInUse] = useState(FEProps?.predefinedValue);
-    const [highlightValue, setHighlightValue] = useState('');
-    const [listItems, setListItems] = useState([]);
-    const [logsRefreshEnabled] = useState(!!refreshInterval);
-
-    const intervalRef = useRef(null);
-    const filtersTimeoutId = useRef(null);
     const virtuosoRef = useRef(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const [ingredients, setIngredients] = useState([]);
+    const [search, setSearch] = useState('');
+    const limit = 50;
 
     useEffect(() => {
-        if (!logsRefreshEnabled) {
-            loadMore();
-        }
-        return () => stopInterval();
+        getItemList({page: START_PAGE, mergeEntries: true});
     }, []);
 
     useEffect(() => {
-        if (virtuosoOnTop && logsRefreshEnabled) {
-            stopInterval();
-            startInterval();
-        } else if (virtuosoOnTop && !logsRefreshEnabled) {
-            getItemList({page: START_PAGE});
-        } else {
-            scrollToTop();
-        }
-    }, [JSON.stringify(filters)]);
-
-    useImperativeHandle(ref, () => ({
-        scrollToIndex,
-    }));
+        setIngredients([]);
+        setCurrentPage(START_PAGE);
+        getItemList({page: START_PAGE});
+    }, [search]);
 
     const loadMore = async () => {
         getItemList({page: currentPage + 1, mergeEntries: true});
     };
 
     const getItemList = ({page, mergeEntries}) => {
-        setLoading(true);
-        if (!listConfig?.requestData) return;
+        axiosClient.get('/ingredients', {
+            params: {
+                offset: limit * page,
+                limit,
+                ...(search ? {name: search} : {}),
+            },
+        })
+            .then(response => {
+                const {hasMore, data, total} = response.data;
 
-        // postSourceData({...listConfig?.requestData, ...filters, page})
-        //     .then((res) => {
-        //         if (!res.data.ok) return;
-        //         const newListItems = res.data.items;
-        //         const newEntries = mergeEntries ? [...listItems, ...newListItems] : newListItems;
-        //         const {groupedItems, groupKeys, groupCounts} = groupByKey(newEntries);
-        //         setListItems(groupedItems);
-        //         setGroupKeys(groupKeys);
-        //         setGroupCounts(groupCounts);
-        //         setCurrentPage(page);
-        //     })
-        //     .finally(() => setLoading(false));
+                const newEntries = mergeEntries ? [...ingredients, ...data] : data;
+                setIngredients(newEntries);
+                setCurrentPage(page)
+                setHasMore(hasMore)
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке ингредиентов:', error);
+            })
     };
 
+    const remove = async (id) => {
+        await axiosClient.delete(`/ingredients/${id}`);
+        setIngredients([]);
+        setCurrentPage(START_PAGE);
+        getItemList({page: START_PAGE});
+    };
     const itemContentHandler = (index, item) => {
-        const actualItem = typeof item === 'number' ? listItems[index] : item;
-        if (!actualItem) return null;
-
-        const content = itemContent(index, actualItem, highlightValue);
-        const checkboxValue = actualItem[listConfig?.mainKey];
-
         return (
-            <ItemCheckboxWrapper checkBoxEnabled={checkBoxEnabled} checkboxValue={checkboxValue}>
-                {content}
+            <ItemCheckboxWrapper checkBoxEnabled={false} checkboxValue={item.id}>
+                <div className="flex w-full ">
+                    <div className="flex flex-col items-start justify-center w-full">
+                        <div className="truncate">{item.name}</div>
+                        <div className='flex items-center justify-between w-full'>
+                            <Chip className={'h-4 '} size="sm">{item.createdBy}</Chip>
+                            <div className='space-x-2'>
+                                <Chip size='sm'
+                                      className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{item.calories} ккал</Chip>
+                                <Chip size='sm'
+                                      className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {item.protein}</Chip>
+                                <Chip size='sm'
+                                      className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {item.fat}</Chip>
+                                <Chip size='sm'
+                                      className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {item.carbs}</Chip>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Button isIconOnly
+                            variant={'light'}
+                            className={`h-7 min-h-7 w-7 min-w-7`}
+                            onPress={() => remove(item.id)}
+                    >
+                        <Icon icon={faTrashCan}/>
+                    </Button>
+                </div>
             </ItemCheckboxWrapper>
         );
     };
 
-    const groupByKey = (items) => {
-        const groups = {};
-
-        if (groupBy?.key) {
-            items.forEach((item) => {
-                const date = item[groupBy.key]
-                if (!groups[date]) {
-                    groups[date] = [];
-                }
-                groups[date].push(item);
-            });
-
-            const groupKeys = Object.keys(groups);
-            const groupedItems = groupKeys.flatMap((key) => groups[key]);
-            const groupCounts = groupKeys.map((key) => groups[key].length);
-
-            return {groupedItems, groupKeys, groupCounts};
-        } else {
-            return {groupedItems: items, groupKeys: [], groupCounts: []};
-        }
-    };
-
-    const onChangeCheckboxList = (selectedIds) => {
-        setCheckboxList(selectedIds);
-    };
-
-    const scrollToTop = () => {
-        if (virtuosoRef.current) {
-            virtuosoRef.current.scrollToIndex(0);
-        }
-    };
-
-    const scrollToIndex = (index) => {
-        if (virtuosoRef.current) {
-            virtuosoRef.current.scrollToIndex(index);
-        }
-    };
-
-    const onTopStateChange = (isOnTop) => {
-        setVirtuosoOnTop(isOnTop);
-        isOnTop && logsRefreshEnabled ? startInterval() : stopInterval();
-    };
-
-    const onFilterChange = (data) => {
-        clearTimeout(filtersTimeoutId.current);
-        filtersTimeoutId.current = setTimeout(() => {
-            setFilters(data);
-            FEProps?.onFilterChange?.(data);
-            setFilterInUse(data);
-        }, 300);
-    };
-
-    const renderGroup = (index) => {
+    const Footer = () => {
+        if (!hasMore) return null;
         return (
-            <div className="bg-gray-50 px-3 py-3 sm:px-6 flex justify-between flex-row items-center gap-1">
-                {groupBy.title}: {groupKeys[index]}
-                {groupBy.count && (
-                    <Chip variant="flat" size="sm">
-                        Count: {groupCounts[index]}
-                    </Chip>
-                )}
+            <div className="p-1 flex justify-center">
+                <Spinner/>
             </div>
         );
     };
 
-    const renderFooter = () =>
-        hasMore
-            ? () => (
-                <div className="p-1 flex justify-center">
-                    <Spinner/>
-                </div>
-            )
-            : null;
-
-    const startInterval = () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-        }
-        getItemList({page: START_PAGE});
-        intervalRef.current = setInterval(() => {
-            getItemList({page: START_PAGE});
-        }, refreshInterval);
-    };
-
-    const stopInterval = () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-    };
-
-    const onBottomStateChange = (virtuosoOnBottom) => {
-        if (!virtuosoOnTop && currentPage === START_PAGE && virtuosoOnBottom) {
-            loadMore();
-        }
-    };
-
-    const refreshData = () => {
-        getItemList({page: START_PAGE});
-        scrollToTop();
-    };
-
-    const commonProps = {
-        ref: virtuosoRef,
-        style: {
-            flex: 1,
-            position: "relative",
-        },
-        components: {
-            Footer: renderFooter,
-        },
-        atBottomStateChange: onBottomStateChange,
-        atTopStateChange: onTopStateChange,
-        itemContent: itemContentHandler,
-        endReached: loadMore,
-    };
 
     return (
         <div className="space-y-4 relative flex h-full flex-1 flex-col gap-4">
@@ -211,57 +110,81 @@ export const UniversalList = forwardRef(({listConfig}, ref) => {
                 shadow="none"
                 classNames={{
                     base: "flex-1 h-full rounded-none sm:rounded-[14px] border",
-                    body: "p-0",
+                    body: "p-0 flex-1",
                     header: "flex flex-row px-3 py-3 sm:px-6 border-b",
+                    footer: "flex flex-row px-3 py-3 sm:px-6 border-b",
                 }}
             >
-                <ListHeader
-                    checkBoxEnabled={checkBoxEnabled}
-                    mainKey={listConfig?.mainKey}
-                    checkboxList={checkboxList}
-                    listHeaderControlsProps={{
-                        filterInUse,
-                        setShowFilterEngine,
-                        showFilterEngine,
-                        setHighlightValue,
-                        highlightValue,
-                        logsRefreshEnabled: true,
-                    }}
-                    onChangeCheckboxList={onChangeCheckboxList}
-                    refreshData={refreshData}
-                    listItems={listItems}
-                    loading={loading}
-                />
+                <CardHeader>
+                    <div className='flex items-center min-h-6 w-full justify-between gap-2'>
+                        <Input
+                            placeholder="Поиск по названию"
+                            value={search}
+                            onValueChange={setSearch}
+                            className="w-full sm:w-64"
+                            autoComplete='off'
+                            isClearable
+                        />
+                        <Button isIconOnly
+                                className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                                onPress={() => setShowModal(true)}
+                        >
+                            <Icon icon={faPlus}/>
+                        </Button>
+
+                        <Button isIconOnly
+                                className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                        >
+                            <Icon icon={faBarcode}/>
+                        </Button>
+
+                    </div>
+                </CardHeader>
                 <CardBody>
                     <CheckboxGroup
-                        onChange={onChangeCheckboxList}
-                        value={checkboxList}
+                        // onChange={onChangeCheckboxList}
+                        // value={checkboxList}
                         classNames={{
                             base: "h-full w-full",
                             wrapper: "h-full gap-0 w-full",
                         }}
                     >
-                        {groupBy ? (
-                            <GroupedVirtuoso
-                                groupContent={renderGroup}
-                                groupCounts={groupCounts}
-                                {...commonProps}
+                            <Virtuoso
+                                ref={virtuosoRef}
+                                data={ingredients}
+                                style={{
+                                    flex: 1,
+                                    position: "relative",
+                                }}
+                                components={{
+                                    Footer: Footer,
+                                }}
+                                itemContent={itemContentHandler}
+                                endReached={hasMore ? loadMore : undefined}
                             />
-                        ) : (
-                            <Virtuoso data={listItems} {...commonProps} />
-                        )}
-                        {!virtuosoOnTop && listConfig?.scrollToTop && (
-                            <Button
-                                className="absolute bottom-5 right-5 z-10 opacity-[.3] hover:opacity-75 active:opacity-75 rounded-full"
-                                onPress={scrollToTop}
-                                isIconOnly
-                            >
-                                <Icon icon={faArrowUp}/>
-                            </Button>
-                        )}
+                        {/*{!virtuosoOnTop && listConfig?.scrollToTop && (*/}
+                        {/*    <Button*/}
+                        {/*        className="absolute bottom-5 right-5 z-10 opacity-[.3] hover:opacity-75 active:opacity-75 rounded-full"*/}
+                        {/*        onPress={scrollToTop}*/}
+                        {/*        isIconOnly*/}
+                        {/*    >*/}
+                        {/*        <Icon icon={faArrowUp}/>*/}
+                        {/*    </Button>*/}
+                        {/*)}*/}
                     </CheckboxGroup>
                 </CardBody>
             </Card>
+
+
+            <AddIngredientModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onCreated={() => {
+                    setIngredients([]);
+                    setCurrentPage(START_PAGE);
+                    getItemList({page: START_PAGE});
+                }}
+            />
         </div>
-    );
-});
+    )
+}
