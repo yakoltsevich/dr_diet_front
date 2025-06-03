@@ -26,7 +26,6 @@ export default function MealForm({
     const [showModal, setShowModal] = useState(false);
 
     const updateIngredient = (index, field, value) => {
-        console.log('updateIngredient', index, field, value);
         const newList = [...mealIngredients];
         newList[index][field] = value;
         setMealIngredients(newList);
@@ -67,9 +66,7 @@ export default function MealForm({
     if (loading) {
         return <p className="text-center text-muted-foreground">Загрузка ингредиентов...</p>;
     }
-    console.log('mealIngredients', mealIngredients);
-    console.log('availableIngredients', availableIngredients);
-    console.log('refetchAvailableIngredients', refetchAvailableIngredients);
+
     return (
         <Card>
             <CardBody className="space-y-4">
@@ -99,46 +96,6 @@ export default function MealForm({
 
                 <div className="space-y-3">
                     <h3 className="font-semibold text-sm">Ingredients</h3>
-                    {/*{mealIngredients.map((ing, index) => {*/}
-                    {/*    console.log('ingredient', ing);*/}
-                    {/*    return (*/}
-                    {/*        <div key={index} className="flex items-center gap-1">*/}
-                    {/*            <AsyncAutocomplete*/}
-                    {/*                className="w-full"*/}
-                    {/*                label="Ingredient"*/}
-                    {/*                selectedKey={'7'}*/}
-                    {/*                onSelectionChange={(key) => {*/}
-                    {/*                    console.log('keys', key);*/}
-                    {/*                    if (key) {*/}
-                    {/*                        updateIngredient(index, 'ingredientId', key)*/}
-                    {/*                    }*/}
-                    {/*                }}*/}
-                    {/*                itemProps={{*/}
-                    {/*                    handleRemoveIngredient: handleRemoveIngredient,*/}
-                    {/*                    placeholder: "Enter employee name",*/}
-                    {/*                }}*/}
-                    {/*            />*/}
-
-                    {/*            <NumberInput*/}
-                    {/*                className="w-32 min-w-16"*/}
-                    {/*                label="Grams"*/}
-                    {/*                minValue={0}*/}
-                    {/*                value={ing.weight}*/}
-                    {/*                onValueChange={(value) => updateIngredient(index, 'weight', value)}*/}
-                    {/*            />*/}
-
-                    {/*            <Button*/}
-                    {/*                variant="light"*/}
-                    {/*                className="text-gray-700 w-5 min-w-5"*/}
-                    {/*                isIconOnly*/}
-                    {/*                onPress={() => removeMealIngredient(index)}*/}
-                    {/*            >*/}
-                    {/*                <Icon icon={faTrashCan}/>*/}
-                    {/*            </Button>*/}
-                    {/*        </div>*/}
-                    {/*    )*/}
-                    {/*})}*/}
-
 
                     {mealIngredients.map((ing, index) => {
                         console.log('ingredient', ing);
@@ -185,19 +142,6 @@ export default function MealForm({
                                             placeholder="Enter employee name"
                                             endContent={<Chip className={'h-4 '} size="sm">{ingr.createdBy}</Chip>}
                                         >
-                                            {/*<div className='flex flex-col items-start justify-center'>*/}
-                                            {/*    <div>{ingr.name}</div>*/}
-                                            {/*    <div className='space-x-2'>*/}
-                                            {/*        <Chip size='sm'*/}
-                                            {/*              className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{ingr.calories.toFixed(0)} ккал</Chip>*/}
-                                            {/*        <Chip size='sm'*/}
-                                            {/*              className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {ingr.protein.toFixed(0)}</Chip>*/}
-                                            {/*        <Chip size='sm'*/}
-                                            {/*              className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {ingr.fat.toFixed(0)}</Chip>*/}
-                                            {/*        <Chip size='sm'*/}
-                                            {/*              className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {ingr.carbs.toFixed(0)}</Chip>*/}
-                                            {/*    </div>*/}
-                                            {/*</div>*/}
                                             {ingr.name}
                                         </AutocompleteItem>
                                     ))}

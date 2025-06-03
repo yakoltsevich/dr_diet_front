@@ -131,7 +131,7 @@ export default function NutritionDiaryPage() {
                         className="space-y-4"
                     >
                         {meals.map((meal) => (
-                            <MealCard key={meal.id} meal={meal}/>
+                            <MealCard key={meal.id} meal={meal} setMeals={setMeals}/>
                         ))}
                         <DayTotal meals={meals}/>
                     </motion.div>

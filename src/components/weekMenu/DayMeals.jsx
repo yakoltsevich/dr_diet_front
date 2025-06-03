@@ -3,7 +3,7 @@
 import {MealCard} from "@/components/weekMenu/MealCard";
 import {Select, SelectItem} from "@heroui/select";
 import {Icon} from "@/components/common/Icon";
-import {faArrowLeft, faArrowRight, faChevronLeft, faChevronRight, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {Button, ButtonGroup} from "@heroui/button";
 
 export const DAYS = [
@@ -16,8 +16,7 @@ export const DAYS = [
     {key: "6", label: "Day 7"},
 ];
 const SelectDay = ({activeDay, setActiveDay}) => {
-    const onSelectionChange = (v)=>{
-        console.log('v', v);
+    const onSelectionChange = (v) => {
         setActiveDay(Array.from(v)[0])
     }
     return <Select
@@ -35,8 +34,6 @@ const SelectDay = ({activeDay, setActiveDay}) => {
 }
 export const DayMeals = ({day, activeDay, setActiveDay}) => {
     if (!day) return null;
-console.log(day);
-console.log('activeDay',activeDay);
     return (
         <div className="w-full p-4">
             <h2 className="hidden sm:block text-2xl font-bold text-textColor mb-2">Day {day.day}</h2>
@@ -44,7 +41,7 @@ console.log('activeDay',activeDay);
                 <Button
                     variant="ghost"
                     isIconOnly
-                    className="text-gray-700 border-gray-200 flex items-center w-7 min-w-7"
+                    className="text-gray-700 border-gray-200 flex items-center w-10 min-w-10 shadow-sm"
                     isDisabled={Number(activeDay) === 0}
                     onPress={() => setActiveDay(prev => String(Number(prev) - 1))}
                 >
@@ -54,7 +51,7 @@ console.log('activeDay',activeDay);
                 <Button
                     variant="faded"
                     isIconOnly
-                    className="text-gray-700 border-gray-200 flex items-center w-7 min-w-7"
+                    className="text-gray-700 border-gray-200 flex items-center w-10 min-w-10 shadow-sm"
                     isDisabled={Number(activeDay) === (DAYS.length - 1)}
                     onPress={() => setActiveDay(prev => String(Number(prev) + 1))}
                 >

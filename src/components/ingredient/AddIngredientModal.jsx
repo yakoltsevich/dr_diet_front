@@ -6,6 +6,7 @@ import {Input} from '@heroui/input';
 import {Button} from '@heroui/button';
 import {axiosClient} from "@/lib/axiosClient";
 import {NumberInput} from "@heroui/react";
+import isEqual from 'lodash/isEqual';
 
 const NUTRIENT_CONF = [
     {
@@ -37,6 +38,8 @@ export const createdBy = {
 }
 
 export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue = {}}) {
+    const [loading, setLoading] = useState(false);
+
     const [form, setForm] = useState({
         name: '',
         calories: 0,
@@ -44,16 +47,20 @@ export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue 
         fat: 0,
         carbs: 0,
     });
+
     useEffect(() => {
-        setForm({
+        if (!predefinedValue) return;
+
+        const updated = {
             name: predefinedValue?.name || '',
             calories: predefinedValue?.calories || 0,
             protein: predefinedValue?.protein || 0,
             fat: predefinedValue?.fat || 0,
             carbs: predefinedValue?.carbs || 0,
-        })
+        };
+
+        setForm((prev) => (isEqual(prev, updated) ? prev : updated));
     }, [predefinedValue]);
-    const [loading, setLoading] = useState(false);
 
     const handleChange = (field, value) => {
         setForm((prev) => ({...prev, [field]: value}));

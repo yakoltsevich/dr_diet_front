@@ -8,7 +8,7 @@ import {useRouter} from 'next/navigation';
 import {axiosClient} from '@/lib/axiosClient';
 import {Chip} from '@heroui/react';
 
-export const MealCard = ({meal}) => {
+export const MealCard = ({meal, setMeals}) => {
     const router = useRouter();
 
 
