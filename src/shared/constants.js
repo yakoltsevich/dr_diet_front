@@ -1,7 +1,9 @@
 import {
     faBook,
-    faEllipsisH, faGear,
-    faHouse, faInfoCircle,
+    faEllipsisH,
+    faGear,
+    faHouse,
+    faInfoCircle,
     faPlusCircle,
     faTableList,
     faUser,
@@ -1771,9 +1773,9 @@ export const MOBILE_MENU_ROUTES = [
         icon: faUtensils,
     },
     {
-        route: '/profile',
-        title: 'Profile',
-        icon: faUser,
+        route: '/nutrients',
+        title: 'Nutrients',
+        icon: faTableList,
     },
     {
         route: '/diary',

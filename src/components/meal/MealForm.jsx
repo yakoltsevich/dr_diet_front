@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Input} from '@heroui/input';
 import {Select, SelectItem} from '@heroui/select';
 import {Button} from '@heroui/button';
@@ -11,7 +11,6 @@ import {Autocomplete, AutocompleteItem, Chip, NumberInput} from "@heroui/react";
 import {AddIngredientModal} from '@/components/ingredient/AddIngredientModal';
 import {MEAL_TYPES_OPTIONS} from '@/shared/constants';
 import {axiosClient} from "@/lib/axiosClient";
-import {AsyncAutocomplete} from "@/components/common/AsyncAutocomplete";
 
 export default function MealForm({
                                      initialData,
@@ -208,6 +207,7 @@ export default function MealForm({
                                     className="w-32 min-w-16"
                                     label="Grams"
                                     minValue={0}
+                                    onFocus={(e) => e.target.select()}
                                     value={ing.weight}
                                     onValueChange={(value) => updateIngredient(index, 'weight', value)}
                                 />

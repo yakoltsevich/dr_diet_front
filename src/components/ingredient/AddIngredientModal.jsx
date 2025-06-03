@@ -1,13 +1,7 @@
 'use client';
 
-import {useState} from 'react';
-import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-} from '@heroui/modal';
+import {useEffect, useState} from 'react';
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,} from '@heroui/modal';
 import {Input} from '@heroui/input';
 import {Button} from '@heroui/button';
 import {axiosClient} from "@/lib/axiosClient";
@@ -42,7 +36,7 @@ export const createdBy = {
     ai: 'ai',
 }
 
-export function AddIngredientModal({isOpen, onClose, onCreated}) {
+export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue = {}}) {
     const [form, setForm] = useState({
         name: '',
         calories: 0,
@@ -50,7 +44,15 @@ export function AddIngredientModal({isOpen, onClose, onCreated}) {
         fat: 0,
         carbs: 0,
     });
-
+    useEffect(() => {
+        setForm({
+            name: predefinedValue?.name || '',
+            calories: predefinedValue?.calories || 0,
+            protein: predefinedValue?.protein || 0,
+            fat: predefinedValue?.fat || 0,
+            carbs: predefinedValue?.carbs || 0,
+        })
+    }, [predefinedValue]);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (field, value) => {
@@ -97,6 +99,7 @@ export function AddIngredientModal({isOpen, onClose, onCreated}) {
                             label={item.label}
                             placeholder={item.placeholder}
                             minValue={0}
+                            onFocus={(e) => e.target.select()}
                             isRequired
                             value={form[item.key]}
                             onValueChange={(value) => handleChange(item.key, value)}

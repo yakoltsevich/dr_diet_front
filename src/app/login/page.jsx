@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { CardBody, Card } from '@heroui/card';
-import { useRouter } from 'next/navigation';
+import {useState} from 'react';
+import {Button} from '@heroui/button';
+import {Input} from '@heroui/input';
+import {Card, CardBody} from '@heroui/card';
+import {useRouter} from 'next/navigation';
 import Link from 'next/link';
-import { axiosClient } from '@/lib/axiosClient';
-import { useDispatch } from 'react-redux';
-import { setAccessToken } from '@/store/slices/authSlice';
+import {axiosClient} from '@/lib/axiosClient';
+import {useDispatch} from 'react-redux';
+import {setAccessToken} from '@/store/slices/authSlice';
 
 export default function Page() {
     const [email, setEmail] = useState('');
@@ -23,14 +23,13 @@ export default function Page() {
         setError('');
         setLoading(true)
         try {
-            const { data } = await axiosClient.post('auth/login', { email, password }, { withCredentials: true });
-
+            const {data} = await axiosClient.post('auth/login', {email, password}, {withCredentials: true});
             dispatch(setAccessToken(data.access_token));
             router.push('/');
         } catch (err) {
             console.error(err);
             setError(err.response?.data?.message || 'Login error');
-        }finally {
+        } finally {
             setLoading(false);
         }
     };

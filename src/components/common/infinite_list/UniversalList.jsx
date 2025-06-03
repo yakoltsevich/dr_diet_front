@@ -8,6 +8,7 @@ import {axiosClient} from "@/lib/axiosClient";
 import {Input} from "@heroui/input";
 import {AddIngredientModal} from "@/components/ingredient/AddIngredientModal";
 import {Card, CardBody} from "@heroui/card";
+import {ScanBarcodeModal} from "@/components/ingredient/ScanBarcodeModal";
 
 const START_PAGE = 0;
 export const UniversalList = () => {
@@ -15,6 +16,8 @@ export const UniversalList = () => {
     const [hasMore, setHasMore] = useState(false);
     const virtuosoRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
+    const [scannedData, setScannedData] = useState(null);
+    const [showScanModal, setShowScanModal] = useState(false);
 
     const [ingredients, setIngredients] = useState([]);
     const [search, setSearch] = useState('');
@@ -103,7 +106,6 @@ export const UniversalList = () => {
         );
     };
 
-
     return (
         <div className="space-y-4 relative flex h-[calc(100%-40px)] flex-1 flex-col gap-4">
             <Card
@@ -135,6 +137,7 @@ export const UniversalList = () => {
 
                             <Button isIconOnly
                                     className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
+                                    onPress={() => setShowScanModal(true)}
                             >
                                 <Icon icon={faBarcode}/>
                             </Button>
@@ -181,11 +184,25 @@ export const UniversalList = () => {
             <AddIngredientModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
+                predefinedValue={scannedData}
                 onCreated={() => {
                     setIngredients([]);
                     setCurrentPage(START_PAGE);
                     getItemList({page: START_PAGE});
                 }}
+            />
+            <ScanBarcodeModal
+                isOpen={showScanModal}
+                setAddModal={setShowModal}
+                setScannedData={setScannedData}
+                onClose={() => {
+                    setShowScanModal(false)
+                }}
+                // onCreated={() => {
+                //     setIngredients([]);
+                //     setCurrentPage(START_PAGE);
+                //     getItemList({page: START_PAGE});
+                // }}
             />
         </div>
     )
