@@ -10,24 +10,18 @@ export const ZxingScanner = ({onResult}) => {
     useEffect(() => {
         const codeReader = new BrowserMultiFormatReader();
 
-        const constraints = {
-            video: {
-                facingMode: 'environment',
-                width: {ideal: 1280},
-                height: {ideal: 720},
-                aspectRatio: window.innerWidth < window.innerHeight ? 3 / 4 : 4 / 3, // адаптация под экран
-            }
-        };
-
         codeReader
-            .decodeFromConstraints(constraints, videoRef.current, (result, error, controls) => {
+            .decodeFromVideoDevice(null, videoRef.current, (result, error, controls) => {
                 if (result) {
                     console.log('Barcode detected:', result.getText());
-                    onResult?.(result.getText());
-                    controls.stop();
+                    if (onResult) onResult(result.getText());
+                    controls.stop(); // остановка после первого успешного считывания
                 }
-                if (error && error.name !== 'NotFoundException') {
-                    console.warn('Decode error:', error);
+                if (error) {
+                    // можно игнорировать NotFoundException, т.к. это просто отсутствие кода
+                    if (error.name !== 'NotFoundException') {
+                        console.warn('Decode error:', error);
+                    }
                 }
             })
             .then((controls) => {
@@ -38,18 +32,15 @@ export const ZxingScanner = ({onResult}) => {
             });
 
         return () => {
-            controlsRef.current?.stop();
+            if (controlsRef.current) {
+                controlsRef.current.stop();
+            }
         };
     }, []);
 
     return (
-        <div className="w-full h-full flex justify-center items-center">
-            <video
-                ref={videoRef}
-                className="rounded-lg shadow-lg w-full h-full object-contain"
-                muted
-                playsInline
-            />
+        <div className="w-full flex justify-center">
+            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto"/>
         </div>
     );
-};
+}

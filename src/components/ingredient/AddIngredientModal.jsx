@@ -97,36 +97,32 @@ export function AddIngredientModal({isOpen, onClose, onCreated}) {
         <Modal scrollBehavior='outside' isOpen={isOpen} onClose={onClose} size="md">
             <ModalContent>
                 <ModalHeader>New Ingredient</ModalHeader>
-                <ModalBody className="space-y-3 relative">
-                    {enableScan &&
-                        <div className="absolute inset-0 w-full h-full z-[9999]">
-                            <div className="absolute inset-0 w-full h-full backdrop-blur-sm  z-0" />
-                            <div className="relative z-10 max-h-[300px]">
-                                <BarcodeScannerContainer
-                                    setScannedData={setScannedData}
-                                    onClose={() => setEnableScan(false)}
+                <ModalBody className="space-y-3">
+                    {enableScan
+                        ? (<BarcodeScannerContainer
+                            setScannedData={setScannedData}
+                            onClose={() => setEnableScan(false)}
+                        />)
+                        : (<>
+                            <Input
+                                isRequired
+                                label="Name"
+                                value={form.name}
+                                onChange={(e) => handleChange('name', e.target.value)}
+                            />
+                            {NUTRIENT_CONF.map(item => (
+                                <NumberInput
+                                    key={item.key}
+                                    label={item.label}
+                                    placeholder={item.placeholder}
+                                    minValue={0}
+                                    onFocus={(e) => e.target.select()}
+                                    isRequired
+                                    value={form[item.key]}
+                                    onValueChange={(value) => handleChange(item.key, value)}
                                 />
-                            </div>
-                        </div>}
-                    <Input
-                        isRequired
-                        label="Name"
-                        value={form.name}
-                        onChange={(e) => handleChange('name', e.target.value)}
-                    />
-                    {NUTRIENT_CONF.map(item => (
-                        <NumberInput
-                            key={item.key}
-                            label={item.label}
-                            placeholder={item.placeholder}
-                            minValue={0}
-                            onFocus={(e) => e.target.select()}
-                            isRequired
-                            value={form[item.key]}
-                            onValueChange={(value) => handleChange(item.key, value)}
-                        />
-                    ))}
-
+                            ))}
+                        </>)}
                 </ModalBody>
                 <ModalFooter>
                     <Button
