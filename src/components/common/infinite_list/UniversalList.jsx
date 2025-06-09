@@ -135,12 +135,12 @@ export const UniversalList = () => {
                                 <Icon icon={faPlus}/>
                             </Button>
 
-                            <Button isIconOnly
-                                    className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}
-                                    onPress={() => setShowScanModal(true)}
-                            >
-                                <Icon icon={faBarcode}/>
-                            </Button>
+                            {/*<Button isIconOnly*/}
+                            {/*        className={`h-7 min-h-7 w-7 min-w-7 bg-[#5e7a76] text-white shadow-lg`}*/}
+                            {/*        onPress={() => setShowScanModal(true)}*/}
+                            {/*>*/}
+                            {/*    <Icon icon={faBarcode}/>*/}
+                            {/*</Button>*/}
                         </div>
 
                     </div>
@@ -191,19 +191,19 @@ export const UniversalList = () => {
                     getItemList({page: START_PAGE});
                 }}
             />
-            <ScanBarcodeModal
-                isOpen={showScanModal}
-                setAddModal={setShowModal}
-                setScannedData={setScannedData}
-                onClose={() => {
-                    setShowScanModal(false)
-                }}
-                // onCreated={() => {
-                //     setIngredients([]);
-                //     setCurrentPage(START_PAGE);
-                //     getItemList({page: START_PAGE});
-                // }}
-            />
+            {/*<ScanBarcodeModal*/}
+            {/*    isOpen={showScanModal}*/}
+            {/*    setAddModal={setShowModal}*/}
+            {/*    setScannedData={setScannedData}*/}
+            {/*    onClose={() => {*/}
+            {/*        setShowScanModal(false)*/}
+            {/*    }}*/}
+            {/*    // onCreated={() => {*/}
+            {/*    //     setIngredients([]);*/}
+            {/*    //     setCurrentPage(START_PAGE);*/}
+            {/*    //     getItemList({page: START_PAGE});*/}
+            {/*    // }}*/}
+            {/*/>*/}
         </div>
     )
 }

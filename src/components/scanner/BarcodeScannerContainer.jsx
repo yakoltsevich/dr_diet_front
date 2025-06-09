@@ -6,7 +6,7 @@ import {axiosClient} from '@/lib/axiosClient';
 import ZxingScanner from "@/components/scanner/ZxingScanner";
 import {ScannerMask} from "@/components/scanner/ScannerMask";
 
-export const BarcodeScannerContainer = ({setScannedData, setAddModal, onClose}) => {
+export const BarcodeScannerContainer = ({setScannedData, onClose}) => {
     const [isScanning, setIsScanning] = useState(true);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,6 @@ export const BarcodeScannerContainer = ({setScannedData, setAddModal, onClose}) 
             const res = await axiosClient.get(`/barcode/${barcode}`);
             setScannedData(res.data);
             onClose();
-            setAddModal(true);
         } catch (e) {
             setError(
                 e.response?.status === 404

@@ -1,12 +1,15 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,} from '@heroui/modal';
 import {Input} from '@heroui/input';
 import {Button} from '@heroui/button';
 import {axiosClient} from "@/lib/axiosClient";
 import {NumberInput} from "@heroui/react";
 import isEqual from 'lodash/isEqual';
+import {Icon} from "@/components/common/Icon";
+import {faBarcode} from "@fortawesome/free-solid-svg-icons";
+import {BarcodeScannerContainer} from "@/components/scanner/BarcodeScannerContainer";
 
 const NUTRIENT_CONF = [
     {
@@ -37,8 +40,10 @@ export const createdBy = {
     ai: 'ai',
 }
 
-export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue = {}}) {
+export function AddIngredientModal({isOpen, onClose, onCreated}) {
     const [loading, setLoading] = useState(false);
+    const [enableScan, setEnableScan] = useState(false);
+    const [scannedData, setScannedData] = useState(null);
 
     const [form, setForm] = useState({
         name: '',
@@ -49,18 +54,17 @@ export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue 
     });
 
     useEffect(() => {
-        if (!predefinedValue) return;
-
+        if (!scannedData) return;
         const updated = {
-            name: predefinedValue?.name || '',
-            calories: predefinedValue?.calories || 0,
-            protein: predefinedValue?.protein || 0,
-            fat: predefinedValue?.fat || 0,
-            carbs: predefinedValue?.carbs || 0,
+            name: scannedData?.name || '',
+            calories: scannedData?.calories || 0,
+            protein: scannedData?.protein || 0,
+            fat: scannedData?.fat || 0,
+            carbs: scannedData?.carbs || 0,
         };
 
         setForm((prev) => (isEqual(prev, updated) ? prev : updated));
-    }, [predefinedValue]);
+    }, [scannedData]);
 
     const handleChange = (field, value) => {
         setForm((prev) => ({...prev, [field]: value}));
@@ -93,7 +97,17 @@ export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue 
         <Modal scrollBehavior='outside' isOpen={isOpen} onClose={onClose} size="md">
             <ModalContent>
                 <ModalHeader>New Ingredient</ModalHeader>
-                <ModalBody className="space-y-3">
+                <ModalBody className="space-y-3 relative">
+                    {enableScan &&
+                        <div className="absolute inset-0 w-full h-full z-[9999]">
+                            <div className="absolute inset-0 w-full h-full backdrop-blur-sm  z-0" />
+                            <div className="relative z-10">
+                                <BarcodeScannerContainer
+                                    setScannedData={setScannedData}
+                                    onClose={() => setEnableScan(false)}
+                                />
+                            </div>
+                        </div>}
                     <Input
                         isRequired
                         label="Name"
@@ -112,8 +126,20 @@ export function AddIngredientModal({isOpen, onClose, onCreated, predefinedValue 
                             onValueChange={(value) => handleChange(item.key, value)}
                         />
                     ))}
+
                 </ModalBody>
                 <ModalFooter>
+                    <Button
+                        color="primary"
+                        onPress={() => setEnableScan(prev => !prev)}
+                        isLoading={loading}
+                        className="bg-[#5e7a76] text-white"
+                        isIconOnly
+                    >
+                        <Icon icon={faBarcode}/>
+                    </Button>
+
+                    <div className='flex-1'/>
                     <Button variant="light" onPress={onClose}>
                         Cancel
                     </Button>
