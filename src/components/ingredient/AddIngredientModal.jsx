@@ -101,7 +101,7 @@ export function AddIngredientModal({isOpen, onClose, onCreated}) {
                     {enableScan &&
                         <div className="absolute inset-0 w-full h-full z-[9999]">
                             <div className="absolute inset-0 w-full h-full backdrop-blur-sm  z-0" />
-                            <div className="relative max-h-[300px] z-10">
+                            <div className="relative z-10">
                                 <BarcodeScannerContainer
                                     setScannedData={setScannedData}
                                     onClose={() => setEnableScan(false)}

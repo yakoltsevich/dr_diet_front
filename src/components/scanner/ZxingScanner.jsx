@@ -40,7 +40,7 @@ export default function ZxingScanner({onResult}) {
 
     return (
         <div className="w-full flex justify-center">
-            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto"/>
+            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto max-h-[300px]" />
         </div>
     );
 }
