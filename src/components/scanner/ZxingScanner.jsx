@@ -10,18 +10,24 @@ export const ZxingScanner = ({onResult}) => {
     useEffect(() => {
         const codeReader = new BrowserMultiFormatReader();
 
+        const constraints = {
+            video: {
+                facingMode: 'environment',
+                width: {ideal: 1280},
+                height: {ideal: 720},
+                aspectRatio: window.innerWidth < window.innerHeight ? 3 / 4 : 4 / 3, // адаптация под экран
+            }
+        };
+
         codeReader
-            .decodeFromVideoDevice(null, videoRef.current, (result, error, controls) => {
+            .decodeFromConstraints(constraints, videoRef.current, (result, error, controls) => {
                 if (result) {
                     console.log('Barcode detected:', result.getText());
-                    if (onResult) onResult(result.getText());
-                    controls.stop(); // остановка после первого успешного считывания
+                    onResult?.(result.getText());
+                    controls.stop();
                 }
-                if (error) {
-                    // можно игнорировать NotFoundException, т.к. это просто отсутствие кода
-                    if (error.name !== 'NotFoundException') {
-                        console.warn('Decode error:', error);
-                    }
+                if (error && error.name !== 'NotFoundException') {
+                    console.warn('Decode error:', error);
                 }
             })
             .then((controls) => {
@@ -32,15 +38,18 @@ export const ZxingScanner = ({onResult}) => {
             });
 
         return () => {
-            if (controlsRef.current) {
-                controlsRef.current.stop();
-            }
+            controlsRef.current?.stop();
         };
     }, []);
 
     return (
-        <div className="w-full h-full flex justify-center">
-            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto h-full"/>
+        <div className="w-full h-full flex justify-center items-center">
+            <video
+                ref={videoRef}
+                className="rounded-lg shadow-lg w-full h-full object-contain"
+                muted
+                playsInline
+            />
         </div>
     );
-}
+};
