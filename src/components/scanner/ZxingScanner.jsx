@@ -1,11 +1,18 @@
 'use client';
-
 import {useEffect, useRef} from 'react';
-import {BrowserMultiFormatReader} from '@zxing/browser';
+import {BrowserCodeReader, BrowserMultiFormatReader} from '@zxing/browser';
 
 export const ZxingScanner = ({onResult}) => {
     const videoRef = useRef(null);
     const controlsRef = useRef(null);
+
+    const stopScannerCompletely = () => {
+        BrowserCodeReader.releaseAllStreams();
+        const videoEl = videoRef.current;
+        if (videoEl instanceof HTMLVideoElement) {
+            BrowserCodeReader.cleanVideoSource(videoEl);
+        }
+    };
 
     useEffect(() => {
         const codeReader = new BrowserMultiFormatReader();
@@ -13,34 +20,26 @@ export const ZxingScanner = ({onResult}) => {
         codeReader
             .decodeFromVideoDevice(null, videoRef.current, (result, error, controls) => {
                 if (result) {
-                    console.log('Barcode detected:', result.getText());
-                    if (onResult) onResult(result.getText());
-                    controls.stop(); // остановка после первого успешного считывания
+                    onResult(result.getText());
+                    controls.stop();
+                    stopScannerCompletely();
                 }
-                if (error) {
-                    // можно игнорировать NotFoundException, т.к. это просто отсутствие кода
-                    if (error.name !== 'NotFoundException') {
-                        console.warn('Decode error:', error);
-                    }
+                if (error && error.name !== 'NotFoundException') {
+                    console.warn(error);
                 }
             })
-            .then((controls) => {
-                controlsRef.current = controls;
-            })
-            .catch((err) => {
-                console.error('Camera error:', err);
-            });
+            .then((controls) => (controlsRef.current = controls))
+            .catch(console.error);
 
         return () => {
-            if (controlsRef.current) {
-                controlsRef.current.stop();
-            }
+            controlsRef.current?.stop();
+            stopScannerCompletely();
         };
-    }, []);
+    }, [onResult]);
 
     return (
         <div className="w-full flex justify-center">
-            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto"/>
+            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto" autoPlay muted playsInline/>
         </div>
     );
-}
+};
