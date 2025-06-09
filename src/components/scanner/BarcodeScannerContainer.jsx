@@ -3,7 +3,7 @@
 import {useState} from 'react';
 import {Button} from '@heroui/button';
 import {axiosClient} from '@/lib/axiosClient';
-import ZxingScanner from "@/components/scanner/ZxingScanner";
+import {ZxingScanner} from "@/components/scanner/ZxingScanner";
 import {ScannerMask} from "@/components/scanner/ScannerMask";
 
 export const BarcodeScannerContainer = ({setScannedData, onClose}) => {
@@ -37,7 +37,7 @@ export const BarcodeScannerContainer = ({setScannedData, onClose}) => {
     };
 
     return (
-        <div className="p-4 relative w-full max-w-md mx-auto">
+        <div className="p-4 relative w-full max-w-md mx-auto h-full">
             {isScanning && (
                 <>
                     <ZxingScanner onResult={handleScanSuccess}/>

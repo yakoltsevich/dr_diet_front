@@ -3,7 +3,7 @@
 import {useEffect, useRef} from 'react';
 import {BrowserMultiFormatReader} from '@zxing/browser';
 
-export default function ZxingScanner({onResult}) {
+export const ZxingScanner = ({onResult}) => {
     const videoRef = useRef(null);
     const controlsRef = useRef(null);
 
@@ -39,8 +39,8 @@ export default function ZxingScanner({onResult}) {
     }, []);
 
     return (
-        <div className="w-full flex justify-center">
-            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto max-h-[300px]" />
+        <div className="w-full h-full flex justify-center">
+            <video ref={videoRef} className="rounded-lg shadow-lg w-full h-auto h-full"/>
         </div>
     );
 }
