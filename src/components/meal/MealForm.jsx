@@ -148,7 +148,8 @@ export default function MealForm({
                                 </Autocomplete>
 
                                 <NumberInput
-                                    className="w-32 min-w-16"
+                                    hideStepper
+                                    className="w-16 min-w-16 sm:w-32"
                                     label="Grams"
                                     minValue={0}
                                     onFocus={(e) => e.target.select()}
