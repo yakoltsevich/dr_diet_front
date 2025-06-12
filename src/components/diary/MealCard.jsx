@@ -29,17 +29,17 @@ export const MealCard = ({meal, setMeals}) => {
             {meal.ingredients.map(({ingredient, weight}, idx) => {
                 const ratio = (weight / 100)
                 return (
-                    <div key={idx} className="text-sm text-muted-foreground rounded-lg ">
-                        <div className='font-semibold'>- {ingredient.name}: {weight} г</div>
-                        <div className='space-x-2'>
+                    <div key={idx} className="rounded-lg">
+                        <div className='font-semibold'>- {ingredient.name?.trim()}: {weight} г</div>
+                        <div className='space-x-2 text-sm'>
                             <Chip size='sm'
                                   className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{(ingredient.calories * ratio).toFixed(0)} ккал</Chip>
                             <Chip size='sm'
-                                  className="h-4 px-0  bg-[#d9e0dd] text-[#354e49]">Б {(ingredient.protein * ratio).toFixed(1)}</Chip>
+                                  className="h-4 px-0 bg-[#d9e0dd] text-[#354e49]">Б {(ingredient.protein * ratio).toFixed(1)}</Chip>
                             <Chip size='sm'
-                                  className="h-4 px-0  bg-[#f1e8e0] text-[#6d5a48]">Ж {(ingredient.fat * ratio).toFixed(1)}</Chip>
+                                  className="h-4 px-0 bg-[#f1e8e0] text-[#6d5a48]">Ж {(ingredient.fat * ratio).toFixed(1)}</Chip>
                             <Chip size='sm'
-                                  className="h-4 px-0  bg-[#e1eaea] text-[#4e5e5e]">У {(ingredient.carbs * ratio).toFixed(1)}</Chip>
+                                  className="h-4 px-0 bg-[#e1eaea] text-[#4e5e5e]">У {(ingredient.carbs * ratio).toFixed(1)}</Chip>
                         </div>
                     </div>
                 );
