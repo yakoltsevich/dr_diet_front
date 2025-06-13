@@ -40,6 +40,8 @@ export const BarcodeScannerContainer = ({setScannedData, onClose}) => {
         <div className="p-4 relative w-full max-w-md mx-auto h-full">
             {isScanning && (
                 <>
+                    {/*<ZxingHybridScanner onResult={handleScanSuccess}/>*/}
+                    {/*<ImageCropScanner onResult={handleScanSuccess}/>*/}
                     <ZxingScanner onResult={handleScanSuccess}/>
                     <ScannerMask/>
                 </>

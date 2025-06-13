@@ -101,7 +101,7 @@ export default function NutritionDiaryPage() {
     return (
         <div
             {...swipeHandlers}
-            className="max-w-2xl mx-auto px-4 py-6 space-y-6 touch-pan-x min-h-[inherit]"
+            className="max-w-2xl mx-auto px-4 py-6 space-y-6 touch-pan-x min-h-[inherit] bg-[#e4d1c1]/40"
         >
             <h1 className="text-2xl font-semibold text-center text-[#353535]">
                 Nutrition Diary

@@ -30,8 +30,8 @@ export const MealCard = ({meal, setMeals}) => {
                 const ratio = (weight / 100)
                 return (
                     <div key={idx} className="rounded-lg">
-                        <div className='font-semibold'>- {ingredient.name?.trim()}: {weight} г</div>
-                        <div className='space-x-2 text-sm'>
+                        <div className='font-semibold capitalize'>{ingredient.name?.trim()} - {weight} г</div>
+                        <div className='space-x-2 text-sm  hidden group-focus-within:flex'>
                             <Chip size='sm'
                                   className="h-4 px-0 bg-[#d6d6d6] text-[#353535]">{(ingredient.calories * ratio).toFixed(0)} ккал</Chip>
                             <Chip size='sm'
@@ -47,8 +47,8 @@ export const MealCard = ({meal, setMeals}) => {
         </div>
     }
     return (
-        <Card>
-            <CardBody className="p-4 space-y-2">
+        <Card className="group  bg-[white]/80">
+            <CardBody className="p-4 space-y-2 bg-[transparent]">
                 <div className="flex justify-between items-center gap-2">
                     <div className=''>
                         <h2 className="font-semibold text-lg">{meal.name}</h2>

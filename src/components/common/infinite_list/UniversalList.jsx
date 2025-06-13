@@ -8,7 +8,6 @@ import {axiosClient} from "@/lib/axiosClient";
 import {Input} from "@heroui/input";
 import {AddIngredientModal} from "@/components/ingredient/AddIngredientModal";
 import {Card, CardBody} from "@heroui/card";
-import {ScanBarcodeModal} from "@/components/ingredient/ScanBarcodeModal";
 
 const START_PAGE = 0;
 export const UniversalList = () => {

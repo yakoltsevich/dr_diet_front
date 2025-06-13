@@ -23,7 +23,7 @@ export const DayTotal = ({meals}) => {
     const totals = getTotal();
 
     return (
-        <div className="bg-[#f3f3f2] rounded-xl p-4 text-sm text-center shadow-inner text-[#353535]">
+        <div className="bg-[#f3f3f2] rounded-xl p-4 text-sm shadow-md text-center shadow-inner text-[#353535]">
             <div className='space-x-1'>
                 <strong>Total:</strong>
                 <Chip size='sm'
