@@ -138,11 +138,11 @@ export default function MealForm({
                                     {availableIngredients.map((ingr) => (
                                         <AutocompleteItem
                                             hideSelectedIcon
-                                            key={ingr.id}
+                                            key={ingr?.id}
                                             placeholder="Enter employee name"
-                                            endContent={<Chip className={'h-4 '} size="sm">{ingr.createdBy}</Chip>}
+                                            endContent={<Chip className={'h-4 '} size="sm">{ingr?.createdBy}</Chip>}
                                         >
-                                            {ingr.name}
+                                            {ingr?.name}
                                         </AutocompleteItem>
                                     ))}
                                 </Autocomplete>

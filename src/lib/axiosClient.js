@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '@/store';
 import { setAccessToken } from '@/store/slices/authSlice';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'dev' ? process.env.NEXT_PUBLIC_API_URL_LOCAL : process.env.NEXT_PUBLIC_API_URL;
 
 export const axiosClient = axios.create({
   baseURL: API_URL,

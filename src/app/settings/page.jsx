@@ -7,7 +7,7 @@ import { Select, SelectItem, Skeleton } from '@heroui/react';
 import { Switch } from '@heroui/switch';
 
 const languageOptions = ['en', 'ru'];
-const sourcesList = ['user', 'ai'];
+const sourcesList = ['user', 'ai', 'fdc'];
 
 
 export default function Settings() {
@@ -82,7 +82,7 @@ export default function Settings() {
 
     try {
       const languageValue = Array.from(language)[0];
-      await axiosClient.put('/settings', { language: languageValue, ingredientSources });
+      await axiosClient.patch('/settings', { language: languageValue, ingredientSources });
     } finally {
       setUpdateLoading(false);
     }
@@ -134,7 +134,7 @@ export default function Settings() {
                 <span className="text-sm text-[#353535]">{src}</span>
                 <Skeleton className="rounded-full" isLoaded={!loading}>
                   <Switch
-                    disabled={src === 'user'}
+                    isDisabled={src === 'user'}
                     isSelected={ingredientSources.includes(src)}
                     onValueChange={() => toggleSource(src)}
                   />
